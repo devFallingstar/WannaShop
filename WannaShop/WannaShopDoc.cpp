@@ -431,7 +431,7 @@ void CWannaShopDoc::OnMenuGammaCorrection()
 
 		for (i = 0; i < 256; i++)
 		{
-			temp = (i * 1/dlg.m_Constant);
+			temp = pow(i, 1 / dlg.m_Constant);
 			LUT[i] = temp > 255 ? 255 : temp;
 		}
 
