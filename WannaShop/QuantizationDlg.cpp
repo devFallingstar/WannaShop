@@ -1,4 +1,4 @@
-// QuantizationDlg.cpp : ���� �����Դϴ�.
+﻿// QuantizationDlg.cpp : ±¸Çö ÆÄÀÏÀÔ´Ï´Ù.
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// CQuantizationDlg ��ȭ �����Դϴ�.
+// CQuantizationDlg ´ëÈ­ »óÀÚÀÔ´Ï´Ù.
 
 IMPLEMENT_DYNAMIC(CQuantizationDlg, CDialogEx)
 
@@ -28,7 +28,7 @@ void CQuantizationDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_QuantBit);
 	DDV_MinMaxInt(pDX, m_QuantBit, 1, 32);
 	DDX_Control(pDX, IDC_STATIC1, m_Static1);
-	m_Static1.SetWindowTextW(L"�ܰ�");
+	m_Static1.SetWindowTextW(L"양자화값");
 }
 
 
@@ -37,15 +37,15 @@ BEGIN_MESSAGE_MAP(CQuantizationDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CQuantizationDlg �޽��� ó�����Դϴ�.
+// CQuantizationDlg ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
 
 
 void CQuantizationDlg::OnEnChangeEdit1()
 {
-	// TODO:  RICHEDIT ��Ʈ���� ���, �� ��Ʈ����
-	// CDialogEx::OnInitDialog() �Լ��� ������ 
-	//�ϰ� ����ũ�� OR �����Ͽ� ������ ENM_CHANGE �÷��׸� �����Ͽ� CRichEditCtrl().SetEventMask()�� ȣ������ ������
-	// �� �˸� �޽����� ������ �ʽ��ϴ�.
+	// TODO:  RICHEDIT ÄÁÆ®·ÑÀÎ °æ¿ì, ÀÌ ÄÁÆ®·ÑÀº
+	// CDialogEx::OnInitDialog() ÇÔ¼ö¸¦ ÀçÁöÁ¤ 
+	//ÇÏ°í ¸¶½ºÅ©¿¡ OR ¿¬»êÇÏ¿© ¼³Á¤µÈ ENM_CHANGE ÇÃ·¡±×¸¦ ÁöÁ¤ÇÏ¿© CRichEditCtrl().SetEventMask()¸¦ È£ÃâÇÏÁö ¾ÊÀ¸¸é
+	// ÀÌ ¾Ë¸² ¸Þ½ÃÁö¸¦ º¸³»Áö ¾Ê½À´Ï´Ù.
 
-	// TODO:  ���⿡ ��Ʈ�� �˸� ó���� �ڵ带 �߰��մϴ�.
+	// TODO:  ¿©±â¿¡ ÄÁÆ®·Ñ ¾Ë¸² Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 }

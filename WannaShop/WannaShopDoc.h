@@ -39,7 +39,6 @@ public:
 #endif
 	unsigned char* m_inputImage;
 	unsigned char* m_outputImage;
-	int m_reSize;
 	int m_size;
 	int m_height;
 	int m_width;
@@ -62,6 +61,7 @@ public:
 	int m_Re_width;
 	int m_Re_height;
 	int m_Re_size;
+	double** m_tempImage;
 	void OnUpSampling();
 	void OnQuantization();
 	void OnMenuSumConstant();
@@ -71,4 +71,15 @@ public:
 	void OnMenuNegaConstant();
 	void OnMenuGammaCorrection();
 	void OnMenuBinarization();
+	void OnMenuHistogram();
+	void OnMenuHistoStretch();
+	void OnMenuHistoEqual();
+	void OnMenuEmbossing();
+	double** OnMaskProcess(unsigned char *Target, double Mask[3][3]);
+	double** OnScale(double **Target, int height, int width);
+	double** Image2DMem(int height, int width);
+	void OnMenuBlurr();
+	void OnMenuGaussianFilter();
+	void OnMenuSharpening();
+	void OnMenuMedianFilter();
 };

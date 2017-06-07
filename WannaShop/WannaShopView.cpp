@@ -1,10 +1,10 @@
-
-// WannaShopView.cpp : CWannaShopView Ŭ������ ����
+﻿
+// WannaShopView.cpp : CWannaShopView Å¬·¡½ºÀÇ ±¸Çö
 //
 
 #include "stdafx.h"
-// SHARED_HANDLERS�� �̸� ����, ����� �׸� �� �˻� ���� ó���⸦ �����ϴ� ATL ������Ʈ���� ������ �� ������
-// �ش� ������Ʈ�� ���� �ڵ带 �����ϵ��� �� �ݴϴ�.
+// SHARED_HANDLERS´Â ¹Ì¸® º¸±â, Ãà¼ÒÆÇ ±×¸² ¹× °Ë»ö ÇÊÅÍ Ã³¸®±â¸¦ ±¸ÇöÇÏ´Â ATL ÇÁ·ÎÁ§Æ®¿¡¼­ Á¤ÀÇÇÒ ¼ö ÀÖÀ¸¸ç
+// ÇØ´ç ÇÁ·ÎÁ§Æ®¿Í ¹®¼­ ÄÚµå¸¦ °øÀ¯ÇÏµµ·Ï ÇØ ÁÝ´Ï´Ù.
 #ifndef SHARED_HANDLERS
 #include "WannaShop.h"
 #endif
@@ -22,7 +22,7 @@
 IMPLEMENT_DYNCREATE(CWannaShopView, CView)
 
 BEGIN_MESSAGE_MAP(CWannaShopView, CView)
-	// ǥ�� �μ� �����Դϴ�.
+	// Ç¥ÁØ ÀÎ¼â ¸í·ÉÀÔ´Ï´Ù.
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
@@ -38,13 +38,21 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Binarization, &CWannaShopView::OnBinarization)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
+	ON_COMMAND(ID_Histogram, &CWannaShopView::OnHistogram)
+	ON_COMMAND(ID_Histo_Stretch, &CWannaShopView::OnHistoStretch)
+	ON_COMMAND(ID_Histo_Equal, &CWannaShopView::OnHistoEqual)
+	ON_COMMAND(ID_Embossing, &CWannaShopView::OnEmbossing)
+	ON_COMMAND(ID_Blurr, &CWannaShopView::OnBlurr)
+	ON_COMMAND(ID_Gaussian_Filter, &CWannaShopView::OnGaussianFilter)
+	ON_COMMAND(ID_Sharpening, &CWannaShopView::OnSharpening)
+	ON_COMMAND(ID_Median_Filter, &CWannaShopView::OnMedianFilter)
 END_MESSAGE_MAP()
 
-// CWannaShopView ����/�Ҹ�
+// CWannaShopView »ý¼º/¼Ò¸ê
 
 CWannaShopView::CWannaShopView()
 {
-	// TODO: ���⿡ ���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ »ý¼º ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 
 }
 
@@ -54,13 +62,13 @@ CWannaShopView::~CWannaShopView()
 
 BOOL CWannaShopView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: CREATESTRUCT cs�� �����Ͽ� ���⿡��
-	//  Window Ŭ���� �Ǵ� ��Ÿ���� �����մϴ�.
+	// TODO: CREATESTRUCT cs¸¦ ¼öÁ¤ÇÏ¿© ¿©±â¿¡¼­
+	//  Window Å¬·¡½º ¶Ç´Â ½ºÅ¸ÀÏÀ» ¼öÁ¤ÇÕ´Ï´Ù.
 
 	return CView::PreCreateWindow(cs);
 }
 
-// CWannaShopView �׸���
+// CWannaShopView ±×¸®±â
 
 void CWannaShopView::OnDraw(CDC* pDC)
 {
@@ -86,31 +94,27 @@ void CWannaShopView::OnDraw(CDC* pDC)
 		}
 	}
 
-	// TODO: ���⿡ ���� �����Ϳ� ���� �׸��� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¿ø½Ã µ¥ÀÌÅÍ¿¡ ´ëÇÑ ±×¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 }
 
-
-// CWannaShopView �μ�
-
+// CWannaShopView ÀÎ¼â
 BOOL CWannaShopView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-	// �⺻���� �غ�
+	// ±âº»ÀûÀÎ ÁØºñ
 	return DoPreparePrinting(pInfo);
 }
 
 void CWannaShopView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
-	// TODO: �μ��ϱ� ���� �߰� �ʱ�ȭ �۾��� �߰��մϴ�.
+	// TODO: ÀÎ¼âÇÏ±â Àü¿¡ Ãß°¡ ÃÊ±âÈ­ ÀÛ¾÷À» Ãß°¡ÇÕ´Ï´Ù.
 }
 
 void CWannaShopView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
-	// TODO: �μ� �� ���� �۾��� �߰��մϴ�.
+	// TODO: ÀÎ¼â ÈÄ Á¤¸® ÀÛ¾÷À» Ãß°¡ÇÕ´Ï´Ù.
 }
 
-
-// CWannaShopView ����
-
+// CWannaShopView Áø´Ü
 #ifdef _DEBUG
 void CWannaShopView::AssertValid() const
 {
@@ -122,22 +126,17 @@ void CWannaShopView::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
-CWannaShopDoc* CWannaShopView::GetDocument() const // ����׵��� ���� ������ �ζ������� �����˴ϴ�.
+CWannaShopDoc* CWannaShopView::GetDocument() const // µð¹ö±×µÇÁö ¾ÊÀº ¹öÀüÀº ÀÎ¶óÀÎÀ¸·Î ÁöÁ¤µË´Ï´Ù.
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWannaShopDoc)));
 	return (CWannaShopDoc*)m_pDocument;
 }
 #endif //_DEBUG
 
-
-
-
-// CWannaShopView �޽��� ó����
-
-
+// CWannaShopView ¸Þ½ÃÁö Ã³¸®±â
 void CWannaShopView::OnMenuDownSampling()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -146,10 +145,9 @@ void CWannaShopView::OnMenuDownSampling()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnMenuUpSampling()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -158,10 +156,9 @@ void CWannaShopView::OnMenuUpSampling()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnMenuQuantization()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -170,10 +167,9 @@ void CWannaShopView::OnMenuQuantization()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnSumConstant()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -182,10 +178,9 @@ void CWannaShopView::OnSumConstant()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnSubConstant()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -194,10 +189,9 @@ void CWannaShopView::OnSubConstant()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnMulConstant()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -206,10 +200,9 @@ void CWannaShopView::OnMulConstant()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnDivConstant()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -218,10 +211,9 @@ void CWannaShopView::OnDivConstant()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnNegaTransform()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -230,10 +222,9 @@ void CWannaShopView::OnNegaTransform()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnGammaCorrection()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -242,10 +233,9 @@ void CWannaShopView::OnGammaCorrection()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnBinarization()
 {
-	// TODO: ���⿡ ���� ó���� �ڵ带 �߰��մϴ�.
+	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -256,7 +246,7 @@ void CWannaShopView::OnBinarization()
 
 void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	// TODO: ���⿡ �޽��� ó���� �ڵ带 �߰� ��/�Ǵ� �⺻���� ȣ���մϴ�.
+	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
 	CWannaShopDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
@@ -268,7 +258,7 @@ void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 		unsigned char pixelValue;
 		pixelValue = pDoc->m_inputImage[x*y];
 
-		str.Format(L"X ��ǥ : %d Y��ǥ : %d �ȼ� : %d", x, y, pixelValue);
+		str.Format(L"X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x, y, pixelValue);
 
 		((CMainFrame*)AfxGetMainWnd())->GetStatusBar()->SetPaneText(0, str);
 	}
@@ -276,12 +266,11 @@ void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 	CView::OnMouseMove(nFlags, point);
 }
 
-
 void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: ���⿡ �޽��� ó���� �ڵ带 �߰� ��/�Ǵ� �⺻���� ȣ���մϴ�.
+	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
 	CWannaShopDoc* pDoc = GetDocument();
-	int avg, sum = 0, min=255, max=0;
+	int avg, sum = 0, min, max;
 	int width, height;
 	int size;
 	int i, j;
@@ -290,6 +279,9 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 	width = pDoc->m_width;
 	height = pDoc->m_height;
 	size = width*height;
+
+	min = pDoc->m_inputImage[0];
+	max = pDoc->m_inputImage[0];
 
 	for (i = 0; i < size; i++)
 	{
@@ -307,8 +299,98 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	avg = sum / size;
-	contentsStr.Format(L"�ּҰ��� %d�Դϴ�.\n�ִ밪�� %d�Դϴ�.\n��հ��� %d�Դϴ�.", min, max, avg);
-	MessageBox(contentsStr, L"�� �˸�", MB_ICONINFORMATION);
+	contentsStr.Format(L"최소값은 %d\n최대값은 %d\n평균값은 %d입니다.", min, max, avg);
+	MessageBox(contentsStr, L"값 알림", MB_ICONINFORMATION);
 
 	CView::OnLButtonDown(nFlags, point);
+}
+
+void CWannaShopView::OnHistogram()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuHistogram();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnHistoStretch()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuHistoStretch();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnHistoEqual()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuHistoEqual();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnEmbossing()
+{
+	// TODO: Add your command handler code here
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuEmbossing();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnBlurr()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuBlurr();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnGaussianFilter()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuGaussianFilter();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnSharpening()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuSharpening();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnMedianFilter()
+{
+	// TODO: Add your command handler code here
 }

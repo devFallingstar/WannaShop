@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 한국어(대한민국) resources
+// Korean (Korea) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -190,6 +190,18 @@ BEGIN
         MENUITEM "반전",                          ID_Nega_Transform
         MENUITEM "감마 보정",                       32785
         MENUITEM "이진화",                         ID_Binarization
+        MENUITEM SEPARATOR
+        MENUITEM "히스토그램",                       ID_Histogram
+        MENUITEM "히스토그램 스트레칭",                  ID_Histo_Stretch
+        MENUITEM "히스토그램 평활화",                   ID_Histo_Equal
+    END
+    POPUP "Chapter 5"
+    BEGIN
+        MENUITEM "엠보싱 처리",                      ID_Embossing
+        MENUITEM "블러링 처리",                      ID_Blurr
+        MENUITEM "가우시안 필터 처리",                  ID_Gaussian_Filter
+        MENUITEM "샤프닝 처리",                      32802
+        MENUITEM "중간 값 필터링",                    ID_Median_Filter
     END
 END
 
@@ -498,7 +510,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // 한국어(대한민국) resources
+#endif    // Korean (Korea) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

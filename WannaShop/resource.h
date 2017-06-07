@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++에서 생성한 포함 파일입니다.
-// WannaShop.rc에서 사용되고 있습니다.
+// Microsoft Visual C++ generated include file.
+// Used by WannaShop.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
@@ -29,13 +29,31 @@
 #define ID_Gamma_Correction             32785
 #define ID_CHAPTER4_32786               32786
 #define ID_Binarization                 32787
+#define ID_CHAPTER4_32788               32788
+#define ID_Histogram                    32789
+#define ID_CHAPTER4_32790               32790
+#define ID_Histo_Stretch                32791
+#define ID_CHAPTER4_32792               32792
+#define ID_Histo_Equal                  32793
+#define ID_CHAPTER5_32794               32794
+#define ID_Embossing                    32795
+#define ID_CHAPTER5_32796               32796
+#define ID_Menu                         32797
+#define ID_Blurr                        32798
+#define ID_CHAPTER5_32799               32799
+#define ID_Gaussian_filter              32800
+#define ID_Gaussian_Filter              32801
+#define ID_Sharpening                   32802
+#define ID_CHAPTER5_ID                  32803
+#define ID_CHAPTER5_32804               32804
+#define ID_Median_Filter                32805
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32788
+#define _APS_NEXT_COMMAND_VALUE         32806
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

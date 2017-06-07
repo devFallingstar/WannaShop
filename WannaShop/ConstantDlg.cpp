@@ -1,4 +1,4 @@
-// ConstantDlg.cpp : ���� �����Դϴ�.
+﻿// ConstantDlg.cpp : ±¸Çö ÆÄÀÏÀÔ´Ï´Ù.
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// CConstantDlg ��ȭ �����Դϴ�.
+// CConstantDlg ´ëÈ­ »óÀÚÀÔ´Ï´Ù.
 
 IMPLEMENT_DYNAMIC(CConstantDlg, CDialogEx)
 
@@ -28,7 +28,7 @@ void CConstantDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_Constant);
 	DDV_MinMaxDouble(pDX, m_Constant, 0, 255);
 	DDX_Control(pDX, IDC_STATIC1, m_Static1);
-	m_Static1.SetWindowTextW(L"��� ��");
+	m_Static1.SetWindowTextW(L"상수값");
 }
 
 
@@ -37,15 +37,15 @@ BEGIN_MESSAGE_MAP(CConstantDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CConstantDlg �޽��� ó�����Դϴ�.
+// CConstantDlg ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
 
 
 void CConstantDlg::OnEnChangeEdit1()
 {
-	// TODO:  RICHEDIT ��Ʈ���� ���, �� ��Ʈ����
-	// CDialogEx::OnInitDialog() �Լ��� ������ 
-	//�ϰ� ����ũ�� OR �����Ͽ� ������ ENM_CHANGE �÷��׸� �����Ͽ� CRichEditCtrl().SetEventMask()�� ȣ������ ������
-	// �� �˸� �޽����� ������ �ʽ��ϴ�.
+	// TODO:  RICHEDIT ÄÁÆ®·ÑÀÎ °æ¿ì, ÀÌ ÄÁÆ®·ÑÀº
+	// CDialogEx::OnInitDialog() ÇÔ¼ö¸¦ ÀçÁöÁ¤ 
+	//ÇÏ°í ¸¶½ºÅ©¿¡ OR ¿¬»êÇÏ¿© ¼³Á¤µÈ ENM_CHANGE ÇÃ·¡±×¸¦ ÁöÁ¤ÇÏ¿© CRichEditCtrl().SetEventMask()¸¦ È£ÃâÇÏÁö ¾ÊÀ¸¸é
+	// ÀÌ ¾Ë¸² ¸Þ½ÃÁö¸¦ º¸³»Áö ¾Ê½À´Ï´Ù.
 
-	// TODO:  ���⿡ ��Ʈ�� �˸� ó���� �ڵ带 �߰��մϴ�.
+	// TODO:  ¿©±â¿¡ ÄÁÆ®·Ñ ¾Ë¸² Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 }

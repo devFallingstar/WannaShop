@@ -54,6 +54,14 @@ public:
 	afx_msg void OnBinarization();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnHistogram();
+	afx_msg void OnHistoStretch();
+	afx_msg void OnHistoEqual();
+	afx_msg void OnEmbossing();
+	afx_msg void OnBlurr();
+	afx_msg void OnGaussianFilter();
+	afx_msg void OnSharpening();
+	afx_msg void OnMedianFilter();
 };
 
 #ifndef _DEBUG  // WannaShopView.cpp의 디버그 버전
