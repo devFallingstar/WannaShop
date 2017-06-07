@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Korean (Korea) resources
+// 한국어(대한민국) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -197,11 +197,13 @@ BEGIN
     END
     POPUP "Chapter 5"
     BEGIN
-        MENUITEM "엠보싱 처리",                      ID_Embossing
-        MENUITEM "블러링 처리",                      ID_Blurr
-        MENUITEM "가우시안 필터 처리",                  ID_Gaussian_Filter
-        MENUITEM "샤프닝 처리",                      32802
-        MENUITEM "중간 값 필터링",                    ID_Median_Filter
+        MENUITEM "엠보싱",                         ID_Embossing
+        MENUITEM "흐림 효과",                       ID_Blurr
+        MENUITEM "가우시안 흐림 효과",                  ID_Gaussian_Filter
+        MENUITEM "선명하게",                        ID_Sharpening
+        MENUITEM SEPARATOR
+        MENUITEM "중간 값 처리",                     ID_Median_Filter
+        MENUITEM "쿠와하라 처리",                     ID_Kuwahara_Filter
     END
 END
 
@@ -510,7 +512,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // Korean (Korea) resources
+#endif    // 한국어(대한민국) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

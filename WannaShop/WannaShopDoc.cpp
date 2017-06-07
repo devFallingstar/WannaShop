@@ -824,5 +824,176 @@ void CWannaShopDoc::OnMenuSharpening()
 
 void CWannaShopDoc::OnMenuMedianFilter()
 {
-	
+	int i, j, n, m, index = 0;
+	double **tempInputImage, Mask[9];
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_outputImage = new unsigned char[m_Re_size];
+
+	tempInputImage = Image2DMem(m_height + 2, m_width + 2);
+
+	for ( i = 0; i < m_height; i++)
+	{
+		for (j = 0; j < m_width; j++) {
+			tempInputImage[i + 1][j + 1] = (double)m_inputImage[i*m_width + j];
+		}
+	}
+
+	for ( i = 0; i < m_height; i++){
+		for (j = 0; j < m_width; j++) {
+			for ( n = 0; n < 3; n++){
+				for (m = 0; m < 3; m++) {
+					Mask[n * 3 + m] = tempInputImage[i + n][j + m];
+				}
+			}
+			onBubbleSort(Mask, 9);
+			m_outputImage[index] = (unsigned char)Mask[4];
+			index++;
+		}
+	}
 }
+
+void CWannaShopDoc::OnMenuKuwaharaFilter()
+{
+	int i, j, n, m, index = 0, tmpIdx = 0;
+	int kValue;
+	double **tempInputImage, Mask[25];
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_outputImage = new unsigned char[m_Re_size];
+
+	tempInputImage = Image2DMem(m_height + 4, m_width + 4);
+
+	for (i = 0; i < m_height; i++)
+	{
+		for (j = 0; j < m_width; j++) {
+			tempInputImage[i + 1][j + 1] = (double)m_inputImage[i*m_width + j];
+		}
+	}
+
+	for (i = 0; i < m_height; i++) {
+		for (j = 0; j < m_width; j++) {
+			for (n = 0; n < 5; n++) {
+				for (m = 0; m < 5; m++) {
+					Mask[n * 5 + m] = tempInputImage[i + n][j + m];
+				}
+			}
+			kValue = getKuwaharaValue(Mask);
+			m_outputImage[index] = kValue;
+			index++;
+		}
+	}
+}
+
+int CWannaShopDoc::getKuwaharaValue(double *Matrix)
+{
+	int i, j, k=0, l=0;
+	int min=0;
+	double space[4][9];
+	double sum[4] = { 0, }, avg[4] = { 1, }, devPowSum[4] = { 0, }, var[4] = { 0. };
+
+	/* Divide space for 4 space */
+	for ( i = 0; i <= 10; i += 5)
+	{
+		for ( j = 0; j < 3; j++)
+		{
+			space[0][l] = Matrix[i+j];
+			l++;
+		}
+	}
+
+	k++;
+	l = 0;
+	for (i = 10; i <= 20; i += 5)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			space[1][l] = Matrix[i + j];
+			l++;
+		}
+	}
+	k++;
+	l = 0;
+	for (i = 2; i <= 12; i += 5)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			space[2][l] = Matrix[i + j];
+			l++;
+		}
+	}
+	k++;
+	l = 0;
+	for (i = 12; i <= 22; i += 5)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			space[3][l] = Matrix[i + j];
+			l++;
+		}
+	}
+
+	/* Get sum of all bit for each spaces */
+	for ( i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 9; j++) {
+			sum[i] += space[i][j];
+		}
+	}
+
+	/* Get average of each spaces */
+	for ( i = 0; i < 4; i++)
+	{
+		avg[i] = sum[i] / 9;
+	}
+
+	/* Get sum of pow for deviation of each spaces */
+	for ( i = 0; i < 4; i++)
+	{
+		for ( j = 0; j < 9; j++)
+		{
+			devPowSum[i] += pow((space[i][j] - avg[i]), 2);
+		}
+	}
+
+	/* Get variant of each spaces */
+	for ( i = 0; i < 4; i++)
+	{
+		var[i] += devPowSum[i] / 9;
+	}
+
+	/* Get minimum index with variants */
+	for ( i = 0; i < 4; i++)
+	{
+		if (var[i] <= var[min]) {
+			min = i;
+		}
+	}
+
+	return avg[min];
+}
+
+void CWannaShopDoc::onBubbleSort(double *numbers, int size)
+{
+	int i = 0, j = 0, temp = 0;
+	for (j = 0; j<size; j++)
+	{
+		for (i = 0; i<size - 1; i++)
+		{
+			if (numbers[i]>numbers[i + 1])
+			{
+				temp = numbers[i];
+				numbers[i] = numbers[i + 1];
+				numbers[i + 1] = temp;
+			}
+		}
+	}
+}
+
+

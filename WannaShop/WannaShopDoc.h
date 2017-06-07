@@ -82,4 +82,7 @@ public:
 	void OnMenuGaussianFilter();
 	void OnMenuSharpening();
 	void OnMenuMedianFilter();
+	void onBubbleSort(double*, int);
+	void OnMenuKuwaharaFilter();
+	int getKuwaharaValue(double*);
 };

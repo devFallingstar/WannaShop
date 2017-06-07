@@ -62,6 +62,7 @@ public:
 	afx_msg void OnGaussianFilter();
 	afx_msg void OnSharpening();
 	afx_msg void OnMedianFilter();
+	afx_msg void OnKuwaharaFilter();
 };
 
 #ifndef _DEBUG  // WannaShopView.cpp의 디버그 버전

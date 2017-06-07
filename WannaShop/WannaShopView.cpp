@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Gaussian_Filter, &CWannaShopView::OnGaussianFilter)
 	ON_COMMAND(ID_Sharpening, &CWannaShopView::OnSharpening)
 	ON_COMMAND(ID_Median_Filter, &CWannaShopView::OnMedianFilter)
+	ON_COMMAND(ID_Kuwahara_Filter, &CWannaShopView::OnKuwaharaFilter)
 END_MESSAGE_MAP()
 
 // CWannaShopView »ý¼º/¼Ò¸ê
@@ -393,4 +394,22 @@ void CWannaShopView::OnSharpening()
 void CWannaShopView::OnMedianFilter()
 {
 	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuMedianFilter();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnKuwaharaFilter()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuKuwaharaFilter();
+
+	Invalidate(TRUE);
 }
