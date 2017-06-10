@@ -47,6 +47,8 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Sharpening, &CWannaShopView::OnSharpening)
 	ON_COMMAND(ID_Median_Filter, &CWannaShopView::OnMedianFilter)
 	ON_COMMAND(ID_Kuwahara_Filter, &CWannaShopView::OnKuwaharaFilter)
+	ON_COMMAND(ID_Nearest, &CWannaShopView::OnNearest)
+	ON_COMMAND(ID_Bilinear, &CWannaShopView::OnBilinear)
 END_MESSAGE_MAP()
 
 // CWannaShopView »ý¼º/¼Ò¸ê
@@ -245,67 +247,6 @@ void CWannaShopView::OnBinarization()
 	Invalidate(TRUE);
 }
 
-void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
-	CWannaShopDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-
-	if (point.x > 5 && point.x < pDoc->m_width
-	&& point.y > 5 && point.y < pDoc->m_height)
-	{
-		CString str;
-		int x=point.x, y=point.y;
-		unsigned char pixelValue;
-		pixelValue = pDoc->m_inputImage[x*y];
-
-		str.Format(L"X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x, y, pixelValue);
-
-		((CMainFrame*)AfxGetMainWnd())->GetStatusBar()->SetPaneText(0, str);
-	}
-	
-	CView::OnMouseMove(nFlags, point);
-}
-
-void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
-	CWannaShopDoc* pDoc = GetDocument();
-	int avg, sum = 0, min, max;
-	int width, height;
-	int size;
-	int i, j;
-	CString contentsStr;
-
-	width = pDoc->m_width;
-	height = pDoc->m_height;
-	size = width*height;
-
-	min = pDoc->m_inputImage[0];
-	max = pDoc->m_inputImage[0];
-
-	for (i = 0; i < size; i++)
-	{
-		int currentPixel = pDoc->m_inputImage[i];
-		sum += currentPixel; /* sum for avg */
-
-		if (currentPixel <= min) /* Check min */
-		{
-			min = currentPixel;
-		}
-		if (currentPixel >= max) /* Check max */
-		{
-			max = currentPixel;
-		}
-	}
-
-	avg = sum / size;
-	contentsStr.Format(L"최소값은 %d\n최대값은 %d\n평균값은 %d입니다.", min, max, avg);
-	MessageBox(contentsStr, L"값 알림", MB_ICONINFORMATION);
-
-	CView::OnLButtonDown(nFlags, point);
-}
-
 void CWannaShopView::OnHistogram()
 {
 	// TODO: Add your command handler code here
@@ -412,4 +353,101 @@ void CWannaShopView::OnKuwaharaFilter()
 	pDoc->OnMenuKuwaharaFilter();
 
 	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnNearest()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuNearest();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnBilinear()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuBilinear();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	CWannaShopDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	if (point.x > 5 && point.x < pDoc->m_width
+		&& point.y > 5 && point.y < pDoc->m_height)
+	{
+		CString str;
+		int x = point.x, y = point.y;
+		unsigned char pixelValue;
+		pixelValue = pDoc->m_inputImage[x*y];
+
+		str.Format(L"입력 이미지 : X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x, y, pixelValue);
+
+		((CMainFrame*)AfxGetMainWnd())->GetStatusBar()->SetPaneText(0, str);
+	}
+	else if (point.x > (pDoc->m_width+10) && point.x < (pDoc->m_width) + 10 + (pDoc->m_Re_width)
+		&& point.y > 5 && point.y < pDoc->m_Re_height)
+	{
+		CString str;
+		int x = point.x, y = point.y;
+		unsigned char pixelValue;
+		pixelValue = pDoc->m_outputImage[x*y];
+
+		str.Format(L"출력 이미지 : X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x-pDoc->m_Re_width, pDoc->m_Re_height-y, pixelValue);
+
+		((CMainFrame*)AfxGetMainWnd())->GetStatusBar()->SetPaneText(0, str);
+	}
+
+	CView::OnMouseMove(nFlags, point);
+}
+
+void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	CWannaShopDoc* pDoc = GetDocument();
+	int avg, sum = 0, min, max;
+	int width, height;
+	int size;
+	int i, j;
+	CString contentsStr;
+
+	width = pDoc->m_width;
+	height = pDoc->m_height;
+	size = width*height;
+
+	min = pDoc->m_inputImage[0];
+	max = pDoc->m_inputImage[0];
+
+	for (i = 0; i < size; i++)
+	{
+		int currentPixel = pDoc->m_inputImage[i];
+		sum += currentPixel; /* sum for avg */
+
+		if (currentPixel <= min) /* Check min */
+		{
+			min = currentPixel;
+		}
+		if (currentPixel >= max) /* Check max */
+		{
+			max = currentPixel;
+		}
+	}
+
+	avg = sum / size;
+	contentsStr.Format(L"입력 이미지 : 최소값은 %d\n최대값은 %d\n평균값은 %d입니다.", min, max, avg);
+	MessageBox(contentsStr, L"값 알림", MB_ICONINFORMATION);
+
+	CView::OnLButtonDown(nFlags, point);
 }

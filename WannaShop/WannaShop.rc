@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 한국어(대한민국) resources
+// Korean (Korea) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -204,6 +204,11 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "중간 값 처리",                     ID_Median_Filter
         MENUITEM "쿠와하라 처리",                     ID_Kuwahara_Filter
+    END
+    POPUP "Chapter 6"
+    BEGIN
+        MENUITEM "확대 및 인접 보간",                  ID_Nearest
+        MENUITEM "확대 및 양선형 보간",                 ID_Bilinear
     END
 END
 
@@ -512,7 +517,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // 한국어(대한민국) resources
+#endif    // Korean (Korea) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

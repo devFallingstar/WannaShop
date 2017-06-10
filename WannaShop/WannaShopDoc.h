@@ -85,4 +85,6 @@ public:
 	void onBubbleSort(double*, int);
 	void OnMenuKuwaharaFilter();
 	int getKuwaharaValue(double*);
+	void OnMenuNearest();
+	void OnMenuBilinear();
 };
