@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Korean (Korea) resources
+// 한국어(대한민국) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -199,7 +199,7 @@ BEGIN
     BEGIN
         MENUITEM "엠보싱",                         ID_Embossing
         MENUITEM "흐림 효과",                       ID_Blurr
-        MENUITEM "가우시안 흐림 효과",                  ID_Gaussian_Filter
+        MENUITEM "가우시안 흐림 효과",                  32801
         MENUITEM "선명하게",                        ID_Sharpening
         MENUITEM SEPARATOR
         MENUITEM "중간 값 처리",                     ID_Median_Filter
@@ -209,6 +209,12 @@ BEGIN
     BEGIN
         MENUITEM "확대 및 인접 보간",                  ID_Nearest
         MENUITEM "확대 및 양선형 보간",                 ID_Bilinear
+        MENUITEM SEPARATOR
+        MENUITEM "축소 및 안티 앨리어싱(중간)",            ID_Median_Sub
+        MENUITEM "축소 및 안티 앨리어싱(평균)",            ID_Mean_Sub
+        MENUITEM SEPARATOR
+        MENUITEM "이미지 이동",                      ID_Translation
+        MENUITEM "이미지 좌우 반전",                   ID_Mirror_Hor
     END
 END
 
@@ -284,6 +290,19 @@ BEGIN
     PUSHBUTTON      "취소",IDCANCEL,226,40,50,14
     EDITTEXT        IDC_EDIT1,77,18,161,14,ES_AUTOHSCROLL
     LTEXT           "Static",IDC_STATIC1,33,21,19,8
+END
+
+IDD_DIALOG3 DIALOGEX 0, 0, 309, 92
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,198,71,50,14
+    PUSHBUTTON      "취소",IDCANCEL,252,71,50,14
+    EDITTEXT        IDC_wPos,43,47,213,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_hPos,43,27,213,14,ES_AUTOHSCROLL
+    LTEXT           "수직",IDC_STATIC,18,30,16,8
+    LTEXT           "수평",IDC_STATIC,18,50,16,8
 END
 
 
@@ -365,6 +384,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 54
     END
+
+    IDD_DIALOG3, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 85
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -385,6 +412,11 @@ BEGIN
 END
 
 IDD_DIALOG4 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG3 AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
@@ -517,7 +549,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // Korean (Korea) resources
+#endif    // 한국어(대한민국) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

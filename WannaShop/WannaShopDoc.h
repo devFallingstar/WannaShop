@@ -4,10 +4,11 @@
 
 
 #pragma once
+#include "Math.h"
 #include "SamplingDlg.h"
 #include "QuantizationDlg.h"
-#include "Math.h"
 #include "ConstantDlg.h"
+#include "PosDialog.h"
 
 class CWannaShopDoc : public CDocument
 {
@@ -87,4 +88,8 @@ public:
 	int getKuwaharaValue(double*);
 	void OnMenuNearest();
 	void OnMenuBilinear();
+	void OnMenuMedianSub();
+	void OnMeanSub();
+	void OnMenuTranslation();
+	void OnMenuMirrorHor();
 };

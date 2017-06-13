@@ -189,6 +189,7 @@
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="ConstantDlg.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="PosDialog.h" />
     <ClInclude Include="QuantizationDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SamplingDlg.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="ConstantDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="PosDialog.cpp" />
     <ClCompile Include="QuantizationDlg.cpp" />
     <ClCompile Include="SamplingDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
