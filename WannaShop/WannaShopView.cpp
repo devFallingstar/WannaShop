@@ -82,21 +82,31 @@ void CWannaShopView::OnDraw(CDC* pDC)
 
 	int i, j;
 	unsigned char R, G, B;
-	for (i = 0; i < pDoc->m_height; i++)
+	if (pDoc->m_isColor)
 	{
-		for (j = 0; j < pDoc->m_width; j++) {
-			R = G = B = pDoc->m_inputImage[i*pDoc->m_width + j];
-			pDC->SetPixel(j + 5, i + 5, RGB(R, G, B));
+		for (i = 0; i < pDoc->m_Scale; i++)
+		{
+			for (j = 0; j < pDoc->m_Scale; j++) {
+				pDC->SetPixel(j + 5, i + 5, RGB(pDoc->m_OpenImg[i][j][0], pDoc->m_OpenImg[i][j][1], pDoc->m_OpenImg[i][j][2]));
+			}
 		}
 	}
-	for (i = 0; i < pDoc->m_Re_height; i++)
-	{
-		for (j = 0; j < pDoc->m_Re_width; j++) {
-			R = G = B = pDoc->m_outputImage[i*pDoc->m_Re_width + j];
-			pDC->SetPixel(j + pDoc->m_width + 10, i + 5, RGB(R, G, B));
+	else {
+		for (i = 0; i < pDoc->m_height; i++)
+		{
+			for (j = 0; j < pDoc->m_width; j++) {
+				R = G = B = pDoc->m_inputImage[i*pDoc->m_width + j];
+				pDC->SetPixel(j + 5, i + 5, RGB(R, G, B));
+			}
+		}
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
+				R = G = B = pDoc->m_outputImage[i*pDoc->m_Re_width + j];
+				pDC->SetPixel(j + pDoc->m_width + 10, i + 5, RGB(R, G, B));
+			}
 		}
 	}
-
 	// TODO: ¿©±â¿¡ ¿ø½Ã µ¥ÀÌÅÍ¿¡ ´ëÇÑ ±×¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 }
 

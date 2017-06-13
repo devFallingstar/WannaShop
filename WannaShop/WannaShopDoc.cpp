@@ -33,6 +33,8 @@ CWannaShopDoc::CWannaShopDoc()
 	, m_Re_height(0)
 	, m_Re_size(0)
 	, m_tempImage(NULL)
+	, m_isColor(false)
+	, m_Scale(0)
 {
 	// TODO: ¿©±â¿¡ ÀÏÈ¸¼º »ý¼º ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 
@@ -152,33 +154,61 @@ BOOL CWannaShopDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 	CFile File;
 	File.Open(lpszPathName, CFile::modeRead | CFile::typeBinary);
-
+	
 	if (File.GetLength() == 256 * 256) {
+		m_isColor = false;
 		m_height = 256;
 		m_width = 256;
 	}
 	else if (File.GetLength() == 512 * 512) {
+		m_isColor = false;
 		m_height = 512;
 		m_width = 512;
 	}
 	else if (File.GetLength() == 640 * 480) {
+		m_isColor = false;
 		m_height = 640;
 		m_width = 480;
 	}
+	else if (File.GetLength() == 256 * 256 * 3) {
+		m_isColor = true;
+		m_Scale = 256;
+	}
+	else if (File.GetLength() == 512 * 512 * 3) {
+		m_isColor = true;
+		m_Scale = 512;
+	}
 	else {
-		//AfxMessageBox("Not support");
 		return 0;
 	}
 
-	m_size = m_height * m_width;
-	m_inputImage = new unsigned char[m_size];
-
-	for (int i = 0; i < m_size; i++) {
-		m_inputImage[i] = 255;
+	if (m_isColor)
+	{
+		/*
+		m_OpenImg = new unsigned char**[m_Scale];
+		for (int i = 0; i < m_Scale; i++)
+		{
+			m_OpenImg[i] = new unsigned char*[m_Scale];
+			for (int j = 0; j < m_Scale; j++)
+			{
+				m_OpenImg[i][j] = new unsigned char[3];
+			}
+		}
+		*/
+		
+		File.Read(m_OpenImg, m_Scale * m_Scale * 3);
+		File.Close();
 	}
-	File.Read(m_inputImage, m_size);
-	File.Close();
+	else {
+		m_size = m_height * m_width;
+		m_inputImage = new unsigned char[m_size];
 
+		for (int i = 0; i < m_size; i++) {
+			m_inputImage[i] = 255;
+		}
+		File.Read(m_inputImage, m_size);
+		File.Close();
+	}
 
 	return TRUE;
 }

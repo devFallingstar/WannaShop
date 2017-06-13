@@ -87,4 +87,7 @@ public:
 	int getKuwaharaValue(double*);
 	void OnMenuNearest();
 	void OnMenuBilinear();
+	unsigned char*** m_OpenImg[256][256][3];
+	bool m_isColor;
+	int m_Scale;
 };
