@@ -1071,7 +1071,6 @@ void CWannaShopDoc::OnMenuNearest()
 	}
 }
 
-
 void CWannaShopDoc::OnMenuBilinear()
 {
 	int i, j;
@@ -1133,4 +1132,150 @@ void CWannaShopDoc::OnMenuBilinear()
 			}
 		}
 	}
+}
+
+void CWannaShopDoc::OnMenuMedianSub()
+{
+	int i, j, n, m, M, index = 0;
+	double *Mask, Value;
+	CConstantDlg dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		M = dlg.m_Constant;
+		Mask = new double[M*M];
+
+		m_Re_height = (m_height + 1) / M;
+		m_Re_width = (m_width + 1) / M;
+		m_Re_size = m_Re_height * m_Re_width;
+
+		m_outputImage = new unsigned char[m_Re_size];
+		m_tempImage = Image2DMem(m_height + 1, m_width + 1);
+
+		for (i = 0; i < m_height; i++)
+		{
+			for (j = 0; j < m_width; j++) {
+				m_tempImage[i][j] = (double)m_inputImage[i*m_width + j];
+			}
+		}
+
+		for (i = 0; i < m_height - 1; i = i + M)
+		{
+			for (j = 0; j < m_width - 1; j = j + M) {
+				for (n = 0; n < M; n++)
+				{
+					for (m = 0; m < M; m++)
+					{
+						Mask[n*M + m] = m_tempImage[i + n][j + m];
+					}
+				}
+				onBubbleSort(Mask, M*M);
+				Value = Mask[(int)(M*M / 2)];
+				m_outputImage[index] = (unsigned char)Value;
+				index++;
+			}
+		}
+	}
+}
+
+void CWannaShopDoc::OnMeanSub()
+{
+	int i, j, n, m, M, index = 0, k;
+	double *Mask, Value, Sum = 0.0;
+	CConstantDlg dlg;
+	
+	if (dlg.DoModal() == IDOK)
+	{
+		M = dlg.m_Constant;
+
+		Mask = new double[M*M];
+
+		m_Re_height = (m_height + 1) / M;
+		m_Re_width = (m_width + 1) / M;
+		m_Re_size = m_Re_height * m_Re_width;
+
+		m_outputImage = new unsigned char[m_Re_size];
+		m_tempImage = Image2DMem(m_height + 1, m_width + 1);
+
+		for (i = 0; i < m_height; i++)
+		{
+			for (j = 0; j < m_width; j++) {
+				m_tempImage[i][j] = (double)m_inputImage[i*m_width + j];
+			}
+		}
+
+		for (i = 0; i < m_height - 1; i = i + M)
+		{
+			for (j = 0; j < m_width - 1; j = j + M) {
+				for (n = 0; n < M; n++)
+				{
+					for (m = 0; m < M; m++)
+					{
+						Mask[n*M + m] = m_tempImage[i + n][j + m];
+					}
+				}
+				for ( k = 0; k < M*M; k++)
+				{
+					Sum = Sum + Mask[k];
+				}
+				Value = (Sum / (M*M));
+				m_outputImage[index] = (unsigned char)Value;
+				index++;
+				Sum = 0.0;
+			}
+		}
+	}
+}
+
+
+void CWannaShopDoc::OnMenuTranslation()
+{
+	int i, j;
+	int h_pos, w_pos;
+	double **tempArray;
+	CPosDialog dlg;
+
+	if (dlg.DoModal() == IDOK)
+	{
+		h_pos = dlg.m_hPos;
+		w_pos = dlg.m_wPos;
+
+		m_Re_height = m_height;
+		m_Re_width = m_width;
+		m_Re_size = m_Re_height * m_Re_width;
+
+		m_outputImage = new unsigned char[m_Re_size];
+
+		m_tempImage = Image2DMem(m_height, m_width);
+		tempArray = Image2DMem(m_Re_height, m_Re_width);
+
+		for ( i = 0; i < m_height; i++)
+		{
+			for (j = 0; j < m_width; j++) {
+				m_tempImage[i][j] = (double)m_inputImage[i*m_width + j];
+			}
+		}
+
+		for ( i = 0; i < m_height - h_pos; i++)
+		{
+			for ( j = 0; j < m_width - w_pos; j++)
+			{
+				tempArray[i + h_pos][j + w_pos] = m_tempImage[i][j];
+			}
+		}
+
+		for ( i = 0; i < m_Re_height; i++)
+		{
+			for (j = 0; j < m_Re_width; j++) {
+				m_outputImage[i*m_Re_width + j] = (unsigned char)tempArray[i][j];
+			}
+		}
+
+		delete[] m_tempImage;
+		delete[] tempArray;
+	}
+}
+
+
+void CWannaShopDoc::OnMenuMirrorHor()
+{
 }

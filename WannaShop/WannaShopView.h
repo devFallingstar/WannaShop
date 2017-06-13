@@ -41,7 +41,6 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	void OnDownSampling();
 	afx_msg void OnMenuDownSampling();
 	afx_msg void OnMenuUpSampling();
 	afx_msg void OnMenuQuantization();
@@ -65,6 +64,10 @@ public:
 	afx_msg void OnKuwaharaFilter();
 	afx_msg void OnNearest();
 	afx_msg void OnBilinear();
+	afx_msg void OnMedianSub();
+	afx_msg void OnMeanSub();
+	afx_msg void OnTranslation();
+	afx_msg void OnMirrorHor();
 };
 
 #ifndef _DEBUG  // WannaShopView.cpp의 디버그 버전

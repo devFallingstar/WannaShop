@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by WannaShop.rc
+// Microsoft Visual C++에서 생성한 포함 파일입니다.
+// WannaShop.rc에서 사용되고 있습니다.
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
@@ -10,8 +10,11 @@
 #define IDD_DIALOG2                     312
 #define IDD_DIALOG4                     314
 #define IDR_MENU1                       317
+#define IDD_DIALOG3                     318
 #define IDC_EDIT1                       1000
 #define IDC_STATIC1                     1001
+#define IDC_hPos                        1001
+#define IDC_wPos                        1002
 #define ID_Menu_Down_Sampling           32771
 #define ID_CHAPTER3_UPSAMPLING          32772
 #define ID_Menu_Up_Sampling             32773
@@ -53,14 +56,23 @@
 #define ID_Nearest                      32809
 #define ID_CHAPTER6_32810               32810
 #define ID_Bilinear                     32811
+#define ID_CHAPTER6_32812               32812
+#define ID_MedianSub                    32813
+#define ID_CHAPTER6_32814               32814
+#define ID_Median_Sub                   32815
+#define ID_Mean_Sub                     32816
+#define ID_CHAPTER6_32817               32817
+#define ID_CHAPTER6_32818               32818
+#define ID_Translation                  32819
+#define ID_Mirror_Hor                   32820
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32812
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_COMMAND_VALUE         32821
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -4,10 +4,11 @@
 
 
 #pragma once
+#include "Math.h"
 #include "SamplingDlg.h"
 #include "QuantizationDlg.h"
-#include "Math.h"
 #include "ConstantDlg.h"
+#include "PosDialog.h"
 
 class CWannaShopDoc : public CDocument
 {
@@ -62,6 +63,9 @@ public:
 	int m_Re_height;
 	int m_Re_size;
 	double** m_tempImage;
+	unsigned char*** m_OpenImg[256][256][3];
+	bool m_isColor;
+	int m_Scale;
 	void OnUpSampling();
 	void OnQuantization();
 	void OnMenuSumConstant();
@@ -87,7 +91,8 @@ public:
 	int getKuwaharaValue(double*);
 	void OnMenuNearest();
 	void OnMenuBilinear();
-	unsigned char*** m_OpenImg[256][256][3];
-	bool m_isColor;
-	int m_Scale;
+	void OnMenuMedianSub();
+	void OnMeanSub();
+	void OnMenuTranslation();
+	void OnMenuMirrorHor();
 };

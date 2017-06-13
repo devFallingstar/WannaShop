@@ -49,6 +49,10 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Kuwahara_Filter, &CWannaShopView::OnKuwaharaFilter)
 	ON_COMMAND(ID_Nearest, &CWannaShopView::OnNearest)
 	ON_COMMAND(ID_Bilinear, &CWannaShopView::OnBilinear)
+	ON_COMMAND(ID_Mean_Sub, &CWannaShopView::OnMeanSub)
+	ON_COMMAND(ID_Median_Sub, &CWannaShopView::OnMedianSub)
+	ON_COMMAND(ID_Translation, &CWannaShopView::OnTranslation)
+	ON_COMMAND(ID_Mirror_Hor, &CWannaShopView::OnMirrorHor)
 END_MESSAGE_MAP()
 
 // CWannaShopView »ý¼º/¼Ò¸ê
@@ -389,6 +393,53 @@ void CWannaShopView::OnBilinear()
 	Invalidate(TRUE);
 }
 
+void CWannaShopView::OnMedianSub()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuMedianSub();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnMeanSub()
+{
+	new g_Count[66];
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMeanSub();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnTranslation()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuTranslation();
+
+	Invalidate(TRUE);
+}
+
+
+void CWannaShopView::OnMirrorHor()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuMirrorHor();
+
+	Invalidate(TRUE);
+}
+
 void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
@@ -461,3 +512,4 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 }
+
