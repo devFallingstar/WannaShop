@@ -1,6 +1,6 @@
 # Welcome to WannaShop!
 
-## What is WaanaShop?
+## What is WannaShop?
 
 WannaShop is raw photo edit program implemented with C++ and MFC.
 
@@ -10,7 +10,7 @@ This project is used for homework & individual project of Computer graphics in m
 
 You can edit your own .raw photo with this program.
 
-## Functions list of WanaShop
+## Functions list of WannaShop
 
 - For Black and White images
     - Gamma and Contrast adjustments
