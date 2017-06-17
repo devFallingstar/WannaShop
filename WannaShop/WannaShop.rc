@@ -184,7 +184,7 @@ BEGIN
             MENUITEM "대비 감소",                       ID_Div_Constant
             MENUITEM SEPARATOR
             MENUITEM "반전",                          ID_Nega_Transform
-            MENUITEM "감마 보정",                       ID_Gamma_Correction
+            MENUITEM "조도 보정",                       ID_Gamma_Correction
             MENUITEM "이진화",                         ID_Binarization
             MENUITEM SEPARATOR
             MENUITEM "히스토그램",                       ID_Histogram
@@ -231,12 +231,12 @@ BEGIN
         POPUP "필터 처리"
         BEGIN
             MENUITEM "히스토그램 평탄화",                   ID_Histo_Equal_Color
-            MENUITEM "쿠와하라 필터(색상)",                 ID_Kuwahara_Color
+            MENUITEM "쿠와하라 필터",                     ID_Kuwahara_Color
         END
         POPUP "보정"
         BEGIN
-            MENUITEM "조도 자동 보정",                    ID_Light_Compensation
-            MENUITEM "K-Means 보정",                  ID_Color_Image_Segmentation
+            MENUITEM "조도 보정",                       ID_Light_Compensation
+            MENUITEM "K-Means 조도 보정",               ID_Color_Image_Segmentation
         END
     END
 END
