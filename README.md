@@ -10,7 +10,7 @@ This project is used for homework & individual project of Computer graphics in m
 
 You can edit your own .raw photo with this program.
 
-## Functions list of WaanaShop
+## Functions list of WanaShop
 
 - For Black and White images
     - Gamma and Contrast adjustments
