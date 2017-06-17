@@ -68,6 +68,11 @@ public:
 	afx_msg void OnMeanSub();
 	afx_msg void OnTranslation();
 	afx_msg void OnMirrorHor();
+	afx_msg void OnRgbtoHsi();
+	afx_msg void OnHsitoRgb();
+	afx_msg void OnLightCompensation();
+	afx_msg void OnColorImageSegmentation();
+	afx_msg void OnHistoEqualColor();
 };
 
 #ifndef _DEBUG  // WannaShopView.cpp의 디버그 버전

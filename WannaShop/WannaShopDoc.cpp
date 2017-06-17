@@ -35,6 +35,11 @@ CWannaShopDoc::CWannaShopDoc()
 	, m_tempImage(NULL)
 	, m_isColor(false)
 	, m_Scale(0)
+	, m_HImg(0)
+	, m_isChangeToHSI(false)
+	, m_isChangeToRGB(false)
+	, m_isLightComp(false)
+	, m_isKMeansSeg(false)
 {
 	// TODO: ¿©±â¿¡ ÀÏÈ¸¼º »ý¼º ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
 
@@ -156,17 +161,14 @@ BOOL CWannaShopDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	File.Open(lpszPathName, CFile::modeRead | CFile::typeBinary);
 	
 	if (File.GetLength() == 256 * 256) {
-		m_isColor = false;
 		m_height = 256;
 		m_width = 256;
 	}
 	else if (File.GetLength() == 512 * 512) {
-		m_isColor = false;
 		m_height = 512;
 		m_width = 512;
 	}
 	else if (File.GetLength() == 640 * 480) {
-		m_isColor = false;
 		m_height = 640;
 		m_width = 480;
 	}
@@ -213,7 +215,6 @@ BOOL CWannaShopDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	return TRUE;
 }
 
-
 BOOL CWannaShopDoc::OnSaveDocument(LPCTSTR lpszPathName)
 {
 	// TODO: ¿©±â¿¡ Æ¯¼öÈ­µÈ ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº» Å¬·¡½º¸¦ È£ÃâÇÕ´Ï´Ù.
@@ -246,9 +247,6 @@ void CWannaShopDoc::OnDownSampling() {
 		}
 	}
 }
-
-
-
 
 void CWannaShopDoc::OnUpSampling()
 {
@@ -1026,9 +1024,6 @@ void CWannaShopDoc::onBubbleSort(double *numbers, int size)
 	}
 }
 
-
-
-
 void CWannaShopDoc::OnMenuNearest()
 {
 	int i, j;
@@ -1226,7 +1221,6 @@ void CWannaShopDoc::OnMeanSub()
 	}
 }
 
-
 void CWannaShopDoc::OnMenuTranslation()
 {
 	int i, j;
@@ -1278,4 +1272,397 @@ void CWannaShopDoc::OnMenuTranslation()
 
 void CWannaShopDoc::OnMenuMirrorHor()
 {
+}
+
+
+void CWannaShopDoc::OnMenuRgbToHsi()
+{
+	int i,j,k;
+	m_Re_height = m_Scale;
+	m_Re_width = m_Scale;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_outputImage = new unsigned char[m_Re_size];
+	m_HImg = new unsigned char[m_Re_size];
+	m_SImg = new unsigned char[m_Re_size];
+	m_IImg = new unsigned char[m_Re_size];
+
+	for (i = 0; i < m_Scale; i++)
+	{
+		for ( j = 0; j < m_Scale; j++)
+		{
+			m_HImg[(i*m_Scale) + j] = Sol_H(m_OpenImg[i][j][0], m_OpenImg[i][j][1], m_OpenImg[i][j][2]);
+			m_SImg[(i*m_Scale) + j] = Sol_S(m_OpenImg[i][j][0], m_OpenImg[i][j][1], m_OpenImg[i][j][2]);
+			m_IImg[(i*m_Scale) + j] = Sol_I(m_OpenImg[i][j][0], m_OpenImg[i][j][1], m_OpenImg[i][j][2]);
+		}
+	}
+	m_isChangeToHSI = true;
+	m_isChangeToRGB = false;
+}
+
+unsigned char CWannaShopDoc::Sol_H(unsigned char R, unsigned char G, unsigned char B)
+{
+	double angle;
+	double RR, GG, BB;
+
+	if (R==G && G==B)
+	{
+		return 0;
+	}
+
+	RR = R / 255.;
+	GG = G / 255.;
+	BB = B / 255.;
+
+	angle = ((RR - 0.5*GG) - (0.5*BB)) / (float)sqrt((RR - GG)*(RR - GG) + (RR - BB)*(GG - BB));
+	angle = acos(angle);
+	angle *= 57.29577951;
+
+	if (B>G)
+	{
+		angle = 360.0 - angle;
+	}
+
+	return (unsigned char)((angle / 360) * 255.0);
+}
+
+unsigned char CWannaShopDoc::Sol_S(unsigned char R, unsigned char G, unsigned char B)
+{
+	double minc;
+	double RR, GG, BB;
+
+	RR = R / 255.;
+	GG = G / 255.;
+	BB = B / 255.;
+	if (RR+GG+BB == 0)
+	{
+		return 0;
+	}
+	minc = MinDouble(RR, GG);
+	minc = MinDouble(minc, BB);
+
+	return (unsigned char)((1.0-(3.0/(RR+GG+BB))*minc)*255.0);
+}
+
+unsigned char CWannaShopDoc::Sol_I(unsigned char R, unsigned char G, unsigned char B)
+{
+	double RR, GG, BB;
+
+	RR = R / 255.;
+	GG = G / 255.;
+	BB = B / 255.;
+
+	if (RR+GG+BB == 0)
+	{
+		return 100;
+	}
+
+	return (unsigned char)((RR+GG+BB)/3*255.0);
+}
+
+void CWannaShopDoc::OnMenuHsiToRgb()
+{
+	int i, j;
+	double H, S, I;
+	double RR, GG, BB;
+	double angle1, angle2;
+
+	for ( i = 0; i < m_Scale; i++)
+	{
+		for ( j = 0; j < m_Scale; j++)
+		{
+			H = (double)((m_HImg[(i*m_Scale) + j] / 255.0) * 360.0);
+			S = (double)(m_SImg[(i*m_Scale) + j] / 255.0);
+			I = (double)(m_IImg[(i*m_Scale) + j] / 255.0);
+
+			if (I <= 0.0)
+			{
+				m_ResultImg[i][j][0] = 0;
+				m_ResultImg[i][j][1] = 0;
+				m_ResultImg[i][j][2] = 0;
+				continue;
+			}
+
+			if (I >= 1.0)
+			{
+				m_ResultImg[i][j][0] = 255;
+				m_ResultImg[i][j][1] = 255;
+				m_ResultImg[i][j][2] = 255;
+				continue;
+			}
+
+			if (H<0.0)
+			{
+				H += 360;
+			}
+
+			if (H <= 120.0)
+			{
+				angle1 = H*0.017453293;
+				angle2 = (60 - H)*0.017453293;
+				BB = (1.0 - S) / 3.0;
+				RR = (1.0 + (S*cos(angle1) / cos(angle2))) / 3.0;
+				GG = 1.0 - RR - BB;
+			}
+			else if (120 < H && H <= 240.0)
+			{
+				H = H - 120.0;
+				angle1 = H * 0.017453293;
+				angle2 = (60 - H)*0.017453293;
+				RR = (1.0 - S) / 3.0;
+				GG = (1.0 + (S*cos(angle1) / cos(angle2))) / 3.0;
+				BB = 1.0 - RR - GG;
+			}
+			else
+			{
+				H = H - 240.0;
+				angle1 = H*0.017453293;
+				angle2 = (68 - H)*0.017453293;
+				GG = (1.0 - 5) / 3.0;
+				BB = (1.0 + (S*cos(angle1) / cos(angle2))) / 3.0;
+				RR = 1.0 - GG - BB;
+			}
+
+			RR = RR*255.0*3.0*I;
+			GG = GG*255.0*3.0*I;
+			BB = BB*255.0*3.0*I;
+
+			if (RR > 255) {
+				RR = 255;
+			}
+			if (GG > 255)
+			{
+				GG = 255;
+			}
+			if (BB > 255)
+			{
+				BB = 255;
+			}
+
+			m_ResultImg[i][j][0] = unsigned char(RR);
+			m_ResultImg[i][j][1] = unsigned char(GG);
+			m_ResultImg[i][j][2] = unsigned char(BB);
+		}
+	}
+	m_isChangeToHSI = false;
+	m_isChangeToRGB = true;
+}
+
+void CWannaShopDoc::OnMenuLightCompensation()
+{
+	double Y[256][256];
+	double minY = 9999999.0;
+	double maxY = -0000000.0;
+
+	for (int i = 0; i < m_Scale; i++)
+	{
+		for (int j = 0; j < m_Scale; j++)
+		{
+			Y[i][j] = 0.299*m_OpenImg[i][j][0] +
+				0.587*m_OpenImg[i][j][1] + 0.144*m_OpenImg[i][j][2];
+		}
+	}
+
+	for (int i = 0; i < m_Scale; i++)
+	{
+		for (int j = 0; j < m_Scale; j++)
+		{
+			if (Y[i][j] > maxY) {
+				maxY = Y[i][j];
+			}
+			if (Y[i][j] < minY) {
+				minY = Y[i][j];
+			}
+		}
+	}
+
+	double Yr = maxY - (maxY - minY) * 0.05;
+	int Yr_count = 0;
+
+	for (int i = 0; i < m_Scale; i++)
+	{
+		for (int j = 0; j < m_Scale; j++)
+		{
+			if (Y[i][j] > Yr) 
+			{
+				Yr_count++;
+			}
+		}
+	}
+
+	double Rave, Gave, Bave;
+	Rave = Gave = Bave = 0.0;
+
+	for (int i = 0; i < m_Scale; i++)
+	{
+		for (int j = 0; j < m_Scale; j++)
+		{
+			if (Y[i][j] > Yr)
+			{
+				Rave += (double)m_OpenImg[i][j][0] / Yr_count;
+				Gave += (double)m_OpenImg[i][j][1] / Yr_count;
+				Bave += (double)m_OpenImg[i][j][2] / Yr_count;
+			}
+		}
+	}
+
+	double Rratio = 255.0 / Rave;
+	double Gratio = 255.0 / Gave;
+	double Bratio = 255.0 / Bave;
+
+	double R, G, B;
+
+	for (int i = 0; i < m_Scale; i++)
+	{
+		for (int j = 0; j < m_Scale; j++)
+		{
+			R = m_OpenImg[i][j][0] * Rratio;
+			G = m_OpenImg[i][j][1] * Gratio;
+			B = m_OpenImg[i][j][2] * Bratio;
+			if (R >= 255.0)
+			{
+				R = 255.0;
+			}
+			if (G >= 255.0)
+			{
+				G = 255.0;
+			}
+			if (B >= 255.0)
+			{
+				B = 255.0;
+			}
+			m_ResultImg[i][j][0] = (unsigned char)R;
+			m_ResultImg[i][j][1] = (unsigned char)G;
+			m_ResultImg[i][j][2] = (unsigned char)B;
+		}
+	}
+	m_isLightComp = true;
+}
+
+void CWannaShopDoc::OnMenuColorImageSegmentation()
+{
+	static const int K = 15;
+	int loop = 1;
+	int cluster[256][256] = { K + 1, };
+	int preCluster;
+	double sum[K][3];
+	double center[K][3];
+	double min = 9999999999.9;
+	int minIndex;
+	int number[K];
+	double dist;
+
+	for (int k = 0; k < K; k++) {
+		int x, y;
+		x = rand() % 256;
+		y = rand() % 256;
+		center[k][0] = (double)m_OpenImg[x][y][0];
+		center[k][1] = (double)m_OpenImg[x][y][1];
+		center[k][2] = (double)m_OpenImg[x][y][2];
+	}
+
+	while (loop == 1)
+	{
+		loop = 0;
+		for (int i = 0; i < 256; i++) {
+			for (int j = 0; j < 256; j++) {
+				preCluster = cluster[i][j];
+				min = 9999999999.9;
+				for (int k = 0; k < K; k++) {
+					dist =
+						sqrt(pow(m_OpenImg[i][j][0] - center[k][0], 2.0) +
+							pow(m_OpenImg[i][j][1] - center[k][1], 2.0) +
+							pow(m_OpenImg[i][j][2] - center[k][2], 2.0));
+					if (dist < min) {
+						min = dist;
+						minIndex = k;
+					}
+				}
+				cluster[i][j] = minIndex;
+				if (cluster[i][j] != preCluster) loop = 1;
+			}
+		}
+
+		for (int k = 0; k < K; k++) {
+			sum[k][0] = 0.0; sum[k][1] = 0.0; sum[k][2] = 0.0;
+			number[k] = 0;
+		}
+
+		for (int i = 0; i < 256; i++) {
+			for (int j = 0; j < 256; j++) {
+				sum[cluster[i][j]][0] += m_OpenImg[i][j][0];
+				sum[cluster[i][j]][1] += m_OpenImg[i][j][1];
+				sum[cluster[i][j]][2] += m_OpenImg[i][j][2];
+				number[cluster[i][j]]++;
+			}
+		}
+
+		for (int k = 0; k < K; k++) {
+			center[k][0] = sum[k][0] / number[k];
+			center[k][1] = sum[k][1] / number[k];
+			center[k][2] = sum[k][2] / number[k];
+		}
+	}
+
+	for (int i = 0; i < 256; i++) {
+		for (int j = 0; j < 256; j++) {
+			m_ResultImg[i][j][0] = (unsigned char)center[cluster[i][j]][0];
+			m_ResultImg[i][j][1] = (unsigned char)center[cluster[i][j]][1];
+			m_ResultImg[i][j][2] = (unsigned char)center[cluster[i][j]][2];
+		}
+	}
+
+	m_isKMeansSeg = true;
+}
+
+void CWannaShopDoc::OnMenuHistoEqualColor()
+{
+	OnMenuRgbToHsi();
+
+	int i, value;
+	unsigned char LOW, HIGH, Temp;
+	double SUM = 0.0;
+	double* m_HIST = new double[256];
+	double* m_Sum_Of_HIST = new double[256];
+
+	m_Re_height = m_Scale;
+	m_Re_width = m_Scale;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	LOW = 0; HIGH = 255;
+	// 초기화 
+	for (i = 0; i < 256; i++)
+		m_HIST[i] = LOW;
+
+	// 빈도 수 조사 
+	for (i = 0; i < m_size; i++) {
+		value = (int)m_IImg[i];
+		m_HIST[value]++;
+	}
+
+	// 누적 히스토그램 생성 
+	for (i = 0; i < 256; i++) {
+		SUM += m_HIST[i];
+		m_Sum_Of_HIST[i] = SUM;
+	}
+
+	m_outputImage = new unsigned char[m_Re_size];
+
+	// 입력 영상을 평활화된 영상으로 출력 
+	for (i = 0; i < m_size; i++) {
+		Temp = m_IImg[i];
+		m_IImg[i] = (unsigned char)(m_Sum_Of_HIST[Temp] * HIGH / m_size);
+		
+	}
+
+	m_isLightComp = true;
+
+	m_outputIma
+
+	//OnMenuHsiToRgb();
+}
+
+double CWannaShopDoc::MinDouble(double a, double b)
+{
+	return (a < b) ? a : b;
 }

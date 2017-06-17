@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 한국어(대한민국) resources
+// Korean (Korea) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -174,13 +174,13 @@ BEGIN
     BEGIN
         MENUITEM "WannaShop 정보(&A)...",         ID_APP_ABOUT
     END
-    POPUP "Chapter 3"
+    POPUP "형태 변환"
     BEGIN
-        MENUITEM "Down Sampling",               ID_Menu_Down_Sampling
-        MENUITEM "Up Sampling",                 ID_Menu_Up_Sampling
-        MENUITEM "Quantization",                ID_Menu_Quantization
+        MENUITEM "축소",                          ID_Menu_Down_Sampling
+        MENUITEM "확대",                          ID_Menu_Up_Sampling
+        MENUITEM "양자화",                         ID_Menu_Quantization
     END
-    POPUP "Chapter 4"
+    POPUP "값 보정"
     BEGIN
         MENUITEM "밝기 증가",                       ID_Sum_Constant
         MENUITEM "밝기 감소",                       ID_Sub_Constant
@@ -195,7 +195,7 @@ BEGIN
         MENUITEM "히스토그램 스트레칭",                  ID_Histo_Stretch
         MENUITEM "히스토그램 평활화",                   ID_Histo_Equal
     END
-    POPUP "Chapter 5"
+    POPUP "필터"
     BEGIN
         MENUITEM "엠보싱",                         ID_Embossing
         MENUITEM "흐림 효과",                       ID_Blurr
@@ -205,7 +205,7 @@ BEGIN
         MENUITEM "중간 값 처리",                     ID_Median_Filter
         MENUITEM "쿠와하라 처리",                     ID_Kuwahara_Filter
     END
-    POPUP "Chapter 6"
+    POPUP "고급 형태 변환"
     BEGIN
         MENUITEM "확대 및 인접 보간",                  ID_Nearest
         MENUITEM "확대 및 양선형 보간",                 ID_Bilinear
@@ -215,6 +215,17 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "이미지 이동",                      ID_Translation
         MENUITEM "이미지 좌우 반전",                   ID_Mirror_Hor
+    END
+    POPUP "색상 처리"
+    BEGIN
+        MENUITEM "RGB to HSI",                  ID_RGB_to_HSI
+        MENUITEM "HSI to RGB",                  ID_HSI_to_RGB
+        MENUITEM "히스토그램 평탄화",                   32830
+    END
+    POPUP "조도 보정"
+    BEGIN
+        MENUITEM "조도 자동 보정",                    ID_Light_Compensation
+        MENUITEM "K-Means 보정",                  ID_Color_Image_Segmentation
     END
 END
 
@@ -549,7 +560,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // 한국어(대한민국) resources
+#endif    // Korean (Korea) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

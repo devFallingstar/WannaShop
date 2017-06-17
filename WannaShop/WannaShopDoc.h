@@ -63,8 +63,12 @@ public:
 	int m_Re_height;
 	int m_Re_size;
 	double** m_tempImage;
-	unsigned char*** m_OpenImg[256][256][3];
+	unsigned char m_OpenImg[256][256][3];
+	unsigned char* m_HImg;
+	unsigned char* m_SImg;
+	unsigned char* m_IImg;
 	bool m_isColor;
+	bool m_isChangeToHSI;
 	int m_Scale;
 	void OnUpSampling();
 	void OnQuantization();
@@ -95,4 +99,19 @@ public:
 	void OnMeanSub();
 	void OnMenuTranslation();
 	void OnMenuMirrorHor();
+	void OnMenuRgbToHsi();
+private:
+	unsigned char Sol_S(unsigned char R, unsigned char G, unsigned char B);
+	unsigned char Sol_H(unsigned char R, unsigned char G, unsigned char B);
+	unsigned char Sol_I(unsigned char R, unsigned char G, unsigned char B);
+	double MinDouble(double a, double b);
+public:
+	void OnMenuHsiToRgb();
+	unsigned char m_ResultImg[256][256][3];
+	bool m_isChangeToRGB;
+	void OnMenuLightCompensation();
+	bool m_isLightComp;
+	void OnMenuColorImageSegmentation();
+	boolean m_isKMeansSeg;
+	void OnMenuHistoEqualColor();
 };

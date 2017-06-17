@@ -53,6 +53,11 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Median_Sub, &CWannaShopView::OnMedianSub)
 	ON_COMMAND(ID_Translation, &CWannaShopView::OnTranslation)
 	ON_COMMAND(ID_Mirror_Hor, &CWannaShopView::OnMirrorHor)
+	ON_COMMAND(ID_RGB_to_HSI, &CWannaShopView::OnRgbtoHsi)
+	ON_COMMAND(ID_HSI_to_RGB, &CWannaShopView::OnHsitoRgb)
+	ON_COMMAND(ID_Light_Compensation, &CWannaShopView::OnLightCompensation)
+	ON_COMMAND(ID_Color_Image_Segmentation, &CWannaShopView::OnColorImageSegmentation)
+	ON_COMMAND(ID_Histo_Equal_Color, &CWannaShopView::OnHistoEqualColor)
 END_MESSAGE_MAP()
 
 // CWannaShopView »ý¼º/¼Ò¸ê
@@ -106,8 +111,58 @@ void CWannaShopView::OnDraw(CDC* pDC)
 		for (i = 0; i < pDoc->m_Re_height; i++)
 		{
 			for (j = 0; j < pDoc->m_Re_width; j++) {
+				R = G = B = pDoc->m_outputImage[i*pDoc->m_width + j];
+				pDC->SetPixel(j + pDoc->m_width + 10, i + 5, RGB(R, G, B));
+			}
+		}
+	}
+
+	if (pDoc->m_isChangeToHSI)
+	{
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
+				R = G = B = pDoc->m_HImg[i*pDoc->m_Re_width + j];
+				pDC->SetPixel(j + pDoc->m_Scale + 10, i + 5, RGB(R, G, B));
+			}
+		}
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
+				R = G = B = pDoc->m_SImg[i*pDoc->m_Re_width + j];
+				pDC->SetPixel(j + 5, i + pDoc->m_Scale + 10, RGB(R, G, B));
+			}
+		}
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
+				R = G = B = pDoc->m_IImg[i*pDoc->m_Re_width + j];
+				pDC->SetPixel(j + pDoc->m_Scale + 10, i + pDoc->m_Scale + 10, RGB(R, G, B));
+			}
+		}
+	}
+	else if (pDoc->m_isChangeToRGB) {
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
+				pDC->SetPixel(j + pDoc->m_Scale + 10, i + 5, RGB(pDoc->m_ResultImg[i][j][0], pDoc->m_ResultImg[i][j][1], pDoc->m_ResultImg[i][j][2]));
+			}
+		}
+	}
+	else if (pDoc->m_isLightComp) {
+		for (i = 0; i < pDoc->m_Re_height; i++)
+		{
+			for (j = 0; j < pDoc->m_Re_width; j++) {
 				R = G = B = pDoc->m_outputImage[i*pDoc->m_Re_width + j];
 				pDC->SetPixel(j + pDoc->m_width + 10, i + 5, RGB(R, G, B));
+			}
+		}
+	}
+	else if (pDoc->m_isKMeansSeg) {
+		for (i = 0; i < pDoc->m_Scale; i++)
+		{
+			for (j = 0; j < pDoc->m_Scale; j++) {
+				pDC->SetPixel(j + pDoc->m_Scale + 10, i + 5, RGB(pDoc->m_ResultImg[i][j][0], pDoc->m_ResultImg[i][j][1], pDoc->m_ResultImg[i][j][2]));
 			}
 		}
 	}
@@ -406,7 +461,6 @@ void CWannaShopView::OnMedianSub()
 
 void CWannaShopView::OnMeanSub()
 {
-	new g_Count[66];
 	// TODO: Add your command handler code here
 	CWannaShopDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -439,6 +493,62 @@ void CWannaShopView::OnMirrorHor()
 
 	Invalidate(TRUE);
 }
+
+void CWannaShopView::OnRgbtoHsi()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuRgbToHsi();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnHsitoRgb()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuHsiToRgb();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnLightCompensation()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuLightCompensation();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnColorImageSegmentation()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuColorImageSegmentation();
+
+	Invalidate(TRUE);
+}
+
+void CWannaShopView::OnHistoEqualColor()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuHistoEqualColor();
+
+	Invalidate(TRUE);
+}
+
 
 void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -484,32 +594,40 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 	int i, j;
 	CString contentsStr;
 
-	width = pDoc->m_width;
-	height = pDoc->m_height;
-	size = width*height;
-
-	min = pDoc->m_inputImage[0];
-	max = pDoc->m_inputImage[0];
-
-	for (i = 0; i < size; i++)
+	if (!(pDoc->m_isColor))
 	{
-		int currentPixel = pDoc->m_inputImage[i];
-		sum += currentPixel; /* sum for avg */
+		width = pDoc->m_width;
+		height = pDoc->m_height;
+		size = width*height;
 
-		if (currentPixel <= min) /* Check min */
+		min = pDoc->m_inputImage[0];
+		max = pDoc->m_inputImage[0];
+
+		for (i = 0; i < size; i++)
 		{
-			min = currentPixel;
+			int currentPixel = pDoc->m_inputImage[i];
+			sum += currentPixel; /* sum for avg */
+
+			if (currentPixel <= min) /* Check min */
+			{
+				min = currentPixel;
+			}
+			if (currentPixel >= max) /* Check max */
+			{
+				max = currentPixel;
+			}
 		}
-		if (currentPixel >= max) /* Check max */
-		{
-			max = currentPixel;
-		}
+
+		avg = sum / size;
+		contentsStr.Format(L"입력 이미지 : 최소값은 %d\n최대값은 %d\n평균값은 %d입니다.", min, max, avg);
+		MessageBox(contentsStr, L"값 알림", MB_ICONINFORMATION);
 	}
-
-	avg = sum / size;
-	contentsStr.Format(L"입력 이미지 : 최소값은 %d\n최대값은 %d\n평균값은 %d입니다.", min, max, avg);
-	MessageBox(contentsStr, L"값 알림", MB_ICONINFORMATION);
+	else {
+		contentsStr.Format(L"색상 이미지에서는 지원되지 않습니다.");
+		MessageBox(contentsStr, L"알림", MB_ICONINFORMATION);
+	}
 
 	CView::OnLButtonDown(nFlags, point);
 }
+
 
