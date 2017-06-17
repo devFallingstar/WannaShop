@@ -43,7 +43,7 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Histo_Equal, &CWannaShopView::OnHistoEqual)
 	ON_COMMAND(ID_Embossing, &CWannaShopView::OnEmbossing)
 	ON_COMMAND(ID_Blurr, &CWannaShopView::OnBlurr)
-	ON_COMMAND(ID_Gaussian_Filter, &CWannaShopView::OnGaussianFilter)
+	ON_COMMAND(ID_Gaussian, &CWannaShopView::OnGaussianFilter)
 	ON_COMMAND(ID_Sharpening, &CWannaShopView::OnSharpening)
 	ON_COMMAND(ID_Median_Filter, &CWannaShopView::OnMedianFilter)
 	ON_COMMAND(ID_Kuwahara_Filter, &CWannaShopView::OnKuwaharaFilter)
@@ -58,6 +58,8 @@ BEGIN_MESSAGE_MAP(CWannaShopView, CView)
 	ON_COMMAND(ID_Light_Compensation, &CWannaShopView::OnLightCompensation)
 	ON_COMMAND(ID_Color_Image_Segmentation, &CWannaShopView::OnColorImageSegmentation)
 	ON_COMMAND(ID_Histo_Equal_Color, &CWannaShopView::OnHistoEqualColor)
+	ON_COMMAND(ID_Kuwahara_Color, &CWannaShopView::OnKuwaharaColor)
+	ON_COMMAND(ID_Rotation, &CWannaShopView::OnRotation)
 END_MESSAGE_MAP()
 
 // CWannaShopView »ý¼º/¼Ò¸ê
@@ -111,7 +113,7 @@ void CWannaShopView::OnDraw(CDC* pDC)
 		for (i = 0; i < pDoc->m_Re_height; i++)
 		{
 			for (j = 0; j < pDoc->m_Re_width; j++) {
-				R = G = B = pDoc->m_outputImage[i*pDoc->m_width + j];
+				R = G = B = pDoc->m_outputImage[i*pDoc->m_Re_width + j];
 				pDC->SetPixel(j + pDoc->m_width + 10, i + 5, RGB(R, G, B));
 			}
 		}
@@ -159,6 +161,14 @@ void CWannaShopView::OnDraw(CDC* pDC)
 		}
 	}
 	else if (pDoc->m_isKMeansSeg) {
+		for (i = 0; i < pDoc->m_Scale; i++)
+		{
+			for (j = 0; j < pDoc->m_Scale; j++) {
+				pDC->SetPixel(j + pDoc->m_Scale + 10, i + 5, RGB(pDoc->m_ResultImg[i][j][0], pDoc->m_ResultImg[i][j][1], pDoc->m_ResultImg[i][j][2]));
+			}
+		}
+	}
+	else if (pDoc->m_isKuwaharaColor) {
 		for (i = 0; i < pDoc->m_Scale; i++)
 		{
 			for (j = 0; j < pDoc->m_Scale; j++) {
@@ -400,7 +410,6 @@ void CWannaShopView::OnSharpening()
 	Invalidate(TRUE);
 }
 
-
 void CWannaShopView::OnMedianFilter()
 {
 	// TODO: Add your command handler code here
@@ -494,6 +503,17 @@ void CWannaShopView::OnMirrorHor()
 	Invalidate(TRUE);
 }
 
+void CWannaShopView::OnRotation()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuRotation();
+
+	Invalidate(TRUE);
+}
+
 void CWannaShopView::OnRgbtoHsi()
 {
 	// TODO: Add your command handler code here
@@ -549,6 +569,18 @@ void CWannaShopView::OnHistoEqualColor()
 	Invalidate(TRUE);
 }
 
+void CWannaShopView::OnKuwaharaColor()
+{
+	// TODO: Add your command handler code here
+	CWannaShopDoc *pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnMenuKuwaharaColor();
+
+	Invalidate(TRUE);
+}
+
+
 
 void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -562,7 +594,7 @@ void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 		CString str;
 		int x = point.x, y = point.y;
 		unsigned char pixelValue;
-		pixelValue = pDoc->m_inputImage[x*y];
+		pixelValue = pDoc->m_inputImage[x + y*(pDoc->m_height)];
 
 		str.Format(L"입력 이미지 : X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x, y, pixelValue);
 
@@ -574,9 +606,9 @@ void CWannaShopView::OnMouseMove(UINT nFlags, CPoint point)
 		CString str;
 		int x = point.x, y = point.y;
 		unsigned char pixelValue;
-		pixelValue = pDoc->m_outputImage[x*y];
+		pixelValue = pDoc->m_outputImage[(x - (pDoc->m_width)) + (y*(pDoc->m_Re_height))];
 
-		str.Format(L"출력 이미지 : X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x-pDoc->m_Re_width, pDoc->m_Re_height-y, pixelValue);
+		str.Format(L"출력 이미지 : X 좌표값 : %d Y 좌표값 : %d 픽셀값 : %d", x-(pDoc->m_width), y, pixelValue);
 
 		((CMainFrame*)AfxGetMainWnd())->GetStatusBar()->SetPaneText(0, str);
 	}
@@ -591,7 +623,7 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 	int avg, sum = 0, min, max;
 	int width, height;
 	int size;
-	int i, j;
+	int i;
 	CString contentsStr;
 
 	if (!(pDoc->m_isColor))
@@ -629,5 +661,7 @@ void CWannaShopView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 }
+
+
 
 

@@ -40,9 +40,10 @@ CWannaShopDoc::CWannaShopDoc()
 	, m_isChangeToRGB(false)
 	, m_isLightComp(false)
 	, m_isKMeansSeg(false)
+	, m_HIST(NULL)
+	, m_Sum_Of_HIST(NULL)
+	, m_isKuwaharaColor(false)
 {
-	// TODO: ¿©±â¿¡ ÀÏÈ¸¼º »ý¼º ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
-
 }
 
 CWannaShopDoc::~CWannaShopDoc()
@@ -59,10 +60,6 @@ BOOL CWannaShopDoc::OnNewDocument()
 
 	return TRUE;
 }
-
-
-
-
 
 // CWannaShopDoc serialization
 
@@ -186,18 +183,6 @@ BOOL CWannaShopDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 	if (m_isColor)
 	{
-		/*
-		m_OpenImg = new unsigned char**[m_Scale];
-		for (int i = 0; i < m_Scale; i++)
-		{
-			m_OpenImg[i] = new unsigned char*[m_Scale];
-			for (int j = 0; j < m_Scale; j++)
-			{
-				m_OpenImg[i][j] = new unsigned char[3];
-			}
-		}
-		*/
-		
 		File.Read(m_OpenImg, m_Scale * m_Scale * 3);
 		File.Close();
 	}
@@ -275,14 +260,13 @@ void CWannaShopDoc::OnUpSampling()
 	}
 }
 
-
 void CWannaShopDoc::OnQuantization()
 {
 	CQuantizationDlg dlg;
 	if (dlg.DoModal() == IDOK)
 	{
-		int i, j, value, LEVEL;
-		double HIGH, *TEMP;
+		int i, j, LEVEL;
+		double HIGH, *TEMP, value;
 
 		m_Re_height = m_height;
 		m_Re_width = m_width;
@@ -294,10 +278,9 @@ void CWannaShopDoc::OnQuantization()
 		LEVEL = 256; //Quantization level of input image
 		HIGH = 256.;
 
-		value = (int)pow(2, dlg.m_QuantBit);
+		value = pow(2, dlg.m_QuantBit);
 
-		for (i = 0; i < m_size; i++)
-		{
+		for (i = 0; i < m_size; i++){
 			for (j = 0; j < value; j++) {
 				if (m_inputImage[i] >= (LEVEL / value)*j &&
 					m_inputImage[i] < (LEVEL / value)*(j + 1))
@@ -313,7 +296,6 @@ void CWannaShopDoc::OnQuantization()
 		}
 	}
 }
-
 
 void CWannaShopDoc::OnMenuSumConstant()
 {
@@ -340,7 +322,6 @@ void CWannaShopDoc::OnMenuSumConstant()
 	}
 }
 
-
 void CWannaShopDoc::OnMenuSubConstant()
 {
 	CConstantDlg dlg;
@@ -365,7 +346,6 @@ void CWannaShopDoc::OnMenuSubConstant()
 		}
 	}
 }
-
 
 void CWannaShopDoc::OnMenuMulConstant()
 {
@@ -642,8 +622,7 @@ void CWannaShopDoc::OnMenuEmbossing()
 {
 	int i, j;
 	double EmboMask[3][3] = { {-1,0,0},{0,0,0},{0,0,1} };
-	//Choose mask
-	//double EmboMask[3][3] = { {0,0,0},{0,1,0},{0,0,0} };
+	
 	m_Re_height = m_height;
 	m_Re_width = m_width;
 	m_Re_size = m_Re_height*m_Re_width;
@@ -1035,32 +1014,30 @@ void CWannaShopDoc::OnMenuNearest()
 	{
 		ZoomRate = dlg.m_Constant;
 
-		m_Re_height = int(ZoomRate*m_height);
-		m_Re_width = int(ZoomRate*m_width);
-		m_Re_size = m_Re_height*m_Re_width;
+		m_Re_height = int(ZoomRate*m_height); // 확대된 영상의 높이
+		m_Re_width = int(ZoomRate*m_width); // 확대된 영상의 너비
+		m_Re_size = m_Re_height * m_Re_width;
 
 		m_tempImage = Image2DMem(m_height, m_width);
+
 		tempArray = Image2DMem(m_Re_height, m_Re_width);
 
 		m_outputImage = new unsigned char[m_Re_size];
 
-		for ( i = 0; i < m_height; i++)
-		{
-			for (j = 0; j < m_width; j++) {
+		for (i = 0; i<m_height; i++) {
+			for (j = 0; j<m_width; j++) {
 				m_tempImage[i][j] = (double)m_inputImage[i*m_width + j];
 			}
 		}
-		for (i = 0; i < m_Re_height; i++)
-		{
-			for (j = 0; j < m_Re_width; j++) {
+		for (i = 0; i< m_Re_height; i++) {
+			for (j = 0; j< m_Re_width; j++) {
 				tempArray[i][j] = m_tempImage[i / ZoomRate][j / ZoomRate];
+				// 이웃한 화소를 이용한 보간
 			}
 		}
-
-		for ( i = 0; i < m_Re_height; i++)
-		{
-			for (j = 0; j < m_Re_width; j++) {
-				m_outputImage[i*m_Re_width + j] = (unsigned char)tempArray[i][j];
+		for (i = 0; i< m_Re_height; i++) {
+			for (j = 0; j< m_Re_width; j++) {
+				m_outputImage[i* m_Re_width + j] = (unsigned char)tempArray[i][j];
 			}
 		}
 	}
@@ -1272,12 +1249,84 @@ void CWannaShopDoc::OnMenuTranslation()
 
 void CWannaShopDoc::OnMenuMirrorHor()
 {
+	int i, j;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_outputImage = new unsigned char[m_Re_size];
+
+	for (i = 0; i<m_height; i++) {
+		for (j = 0; j<m_width; j++) {
+			m_outputImage[i*m_width + m_width - j - 1] =
+				m_inputImage[i*m_width + j];
+			// 입력 영상의 배열 값을 출력 영상을 위한
+			// 배열의 수평축 뒷자리부터 저장
+		}
+	}
 }
 
+void CWannaShopDoc::OnMenuRotation()
+{
+	int i, j, CenterH, CenterW, newH, newW, degree = 45;
+	double Radian, PI, **tempArray, Value;
+	CConstantDlg dlg;
+
+	if (dlg.DoModal() == IDOK) {
+		degree = dlg.m_Constant;
+
+		m_Re_height = m_height; // 회전된 영상의 높이
+		m_Re_width = m_width; // 회전된 영상의 너비
+		m_Re_size = m_Re_height * m_Re_width;
+		m_outputImage = new unsigned char[m_Re_size];
+		PI = 3.14159265358979; // 회전각을 위한 PI 값
+		Radian = (double)degree*PI / 180.0;
+		// degree 값을 radian으로 변경
+		CenterH = m_height / 2; // 영상의 중심 좌표
+		CenterW = m_width / 2; // 영상의 중심 좌표
+		m_tempImage = Image2DMem(m_height, m_width);
+		tempArray = Image2DMem(m_Re_height, m_Re_width);
+		for (i = 0; i<m_height; i++) {
+			for (j = 0; j<m_width; j++) {
+				m_tempImage[i][j] = (double)m_inputImage[i*m_width + j];
+			}
+		}
+		for (i = 0; i<m_height; i++) {
+			for (j = 0; j<m_width; j++) {
+				// 회전 변환 행렬을 이용하여 회전하게 될 좌표 값 계산
+				newH = (int)((i - CenterH)*cos(Radian)
+					- (j - CenterW)*sin(Radian) + CenterH);
+				newW = (int)((i - CenterH)*sin(Radian)
+					+ (j - CenterW)*sin(Radian) + CenterW);
+				if (newH < 0 || newH >= m_height) {
+					// 회전된 좌표가 출력 영상을 위한 배열 값을 넘어갈 때
+					Value = 0;
+				}
+				else if (newW < 0 || newW >= m_width) {
+					// 회전된 좌표가 출력 영상을 위한 배열 값을 넘어갈 때
+					Value = 0;
+				}
+				else {
+					Value = m_tempImage[newH][newW];
+				}
+				tempArray[i][j] = Value;
+			}
+		}
+		for (i = 0; i< m_Re_height; i++) {
+			for (j = 0; j< m_Re_width; j++) {
+				m_outputImage[i* m_Re_width + j]
+					= (unsigned char)tempArray[i][j];
+			}
+		}
+		delete[] m_tempImage;
+		delete[] tempArray;
+	}
+}
 
 void CWannaShopDoc::OnMenuRgbToHsi()
 {
-	int i,j,k;
+	int i,j;
 	m_Re_height = m_Scale;
 	m_Re_width = m_Scale;
 	m_Re_size = m_Re_height * m_Re_width;
@@ -1418,7 +1467,7 @@ void CWannaShopDoc::OnMenuHsiToRgb()
 				H = H - 240.0;
 				angle1 = H*0.017453293;
 				angle2 = (68 - H)*0.017453293;
-				GG = (1.0 - 5) / 3.0;
+				GG = (1.0 - S) / 3.0;
 				BB = (1.0 + (S*cos(angle1) / cos(angle2))) / 3.0;
 				RR = 1.0 - GG - BB;
 			}
@@ -1617,52 +1666,105 @@ void CWannaShopDoc::OnMenuColorImageSegmentation()
 
 void CWannaShopDoc::OnMenuHistoEqualColor()
 {
+	int i, j, value = 0;
+	unsigned int Temp;
+	unsigned char LOW, HIGH;
+	double SUM = 0.0;
+
+	m_Re_height = m_height;
+	m_Re_width = m_width;
+	m_Re_size = m_Re_height * m_Re_width;
+
+	m_HIST = new double[256 * 256];
+	m_Sum_Of_HIST = new double[256 * 256];
+
+	LOW = 0;
+	HIGH = 255;
+
 	OnMenuRgbToHsi();
 
-	int i, value;
-	unsigned char LOW, HIGH, Temp;
-	double SUM = 0.0;
-	double* m_HIST = new double[256];
-	double* m_Sum_Of_HIST = new double[256];
+	for (i = 0; i < 256 * 256; i++)
+	{
+		m_HIST[i] = LOW;
+	}
+
+	for (i = 0; i<256; i++)
+	{
+		for (j = 0; j < 256; j++)
+		{
+			value = (int)m_OpenImg[i][j][2];
+			m_HIST[value]++;
+		}
+	}
+
+	for (i = 0; i<256 * 256; i++)
+	{
+		SUM += m_HIST[i];
+		m_Sum_Of_HIST[i] = SUM;
+	}
+
+	for (i = 0; i < 256; i++)
+	{
+		for (j = 0; j < 256; j++)
+		{
+			Temp = m_OpenImg[i][j][2];
+			m_IImg[i*256 + j] = (unsigned char)(m_Sum_Of_HIST[Temp] * HIGH / (256 * 256));
+		}
+	}
+
+	OnMenuHsiToRgb();
+}
+
+void CWannaShopDoc::OnMenuKuwaharaColor()
+{
+	int i, j, n, m, index = 0, tmpIdx = 0;
+	int kValueR, kValueG, kValueB;
+	double **tempInputImageR, **tempInputImageG, **tempInputImageB, MaskR[25], MaskG[25], MaskB[25];
 
 	m_Re_height = m_Scale;
 	m_Re_width = m_Scale;
 	m_Re_size = m_Re_height * m_Re_width;
 
-	LOW = 0; HIGH = 255;
-	// 초기화 
-	for (i = 0; i < 256; i++)
-		m_HIST[i] = LOW;
-
-	// 빈도 수 조사 
-	for (i = 0; i < m_size; i++) {
-		value = (int)m_IImg[i];
-		m_HIST[value]++;
-	}
-
-	// 누적 히스토그램 생성 
-	for (i = 0; i < 256; i++) {
-		SUM += m_HIST[i];
-		m_Sum_Of_HIST[i] = SUM;
-	}
-
 	m_outputImage = new unsigned char[m_Re_size];
 
-	// 입력 영상을 평활화된 영상으로 출력 
-	for (i = 0; i < m_size; i++) {
-		Temp = m_IImg[i];
-		m_IImg[i] = (unsigned char)(m_Sum_Of_HIST[Temp] * HIGH / m_size);
-		
+	tempInputImageR = Image2DMem(m_Scale + 4, m_Scale + 4);
+	tempInputImageG = Image2DMem(m_Scale + 4, m_Scale + 4);
+	tempInputImageB = Image2DMem(m_Scale + 4, m_Scale + 4);
+
+	for (i = 0; i < m_Scale; i++)
+	{
+		for (j = 0; j < m_Scale; j++) {
+			tempInputImageR[i + 1][j + 1] = (unsigned char)m_OpenImg[i][j][0];
+			tempInputImageG[i + 1][j + 1] = (unsigned char)m_OpenImg[i][j][1];
+			tempInputImageB[i + 1][j + 1] = (unsigned char)m_OpenImg[i][j][2];
+		}
 	}
 
-	m_isLightComp = true;
+	for (i = 0; i < m_Scale; i++) {
+		for (j = 0; j < m_Scale; j++) {
+			for (n = 0; n < 5; n++) {
+				for (m = 0; m < 5; m++) {
+					MaskR[n * 5 + m] = tempInputImageR[i + n][j + m];
+					MaskG[n * 5 + m] = tempInputImageG[i + n][j + m];
+					MaskB[n * 5 + m] = tempInputImageB[i + n][j + m];
+				}
+			}
+			kValueR = getKuwaharaValue(MaskR);
+			kValueG = getKuwaharaValue(MaskG);
+			kValueB = getKuwaharaValue(MaskB);
 
-	m_outputIma
+			m_ResultImg[i][j][0] = kValueR;
+			m_ResultImg[i][j][1] = kValueG;
+			m_ResultImg[i][j][2] = kValueB;
 
-	//OnMenuHsiToRgb();
+			index++;
+		}
+	}
+	m_isKuwaharaColor = true;
 }
 
 double CWannaShopDoc::MinDouble(double a, double b)
 {
 	return (a < b) ? a : b;
 }
+

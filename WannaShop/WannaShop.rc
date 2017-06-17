@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Korean (Korea) resources
+// 한국어(대한민국) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -146,7 +146,7 @@ BEGIN
         MENUITEM "인쇄 미리 보기(&V)",                ID_FILE_PRINT_PREVIEW
         MENUITEM "인쇄 설정(&R)...",                ID_FILE_PRINT_SETUP
         MENUITEM SEPARATOR
-        MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1
         MENUITEM SEPARATOR
         MENUITEM "끝내기(&X)",                     ID_APP_EXIT
     END
@@ -174,58 +174,70 @@ BEGIN
     BEGIN
         MENUITEM "WannaShop 정보(&A)...",         ID_APP_ABOUT
     END
-    POPUP "형태 변환"
+    POPUP "흑백"
     BEGIN
-        MENUITEM "축소",                          ID_Menu_Down_Sampling
-        MENUITEM "확대",                          ID_Menu_Up_Sampling
-        MENUITEM "양자화",                         ID_Menu_Quantization
+        POPUP "보정"
+        BEGIN
+            MENUITEM "밝기 증가",                       ID_Sum_Constant
+            MENUITEM "밝기 감소",                       ID_Sub_Constant
+            MENUITEM "대비 증가",                       ID_Mul_Constant
+            MENUITEM "대비 감소",                       ID_Div_Constant
+            MENUITEM SEPARATOR
+            MENUITEM "반전",                          ID_Nega_Transform
+            MENUITEM "감마 보정",                       ID_Gamma_Correction
+            MENUITEM "이진화",                         ID_Binarization
+            MENUITEM SEPARATOR
+            MENUITEM "히스토그램",                       ID_Histogram
+            MENUITEM "히스토그램 스트레칭",                  ID_Histo_Stretch
+            MENUITEM "히스토그램 평활화",                   ID_Histo_Equal
+        END
+        POPUP "필터 처리"
+        BEGIN
+            MENUITEM "엠보싱 효과",                      ID_Embossing
+            MENUITEM SEPARATOR
+            MENUITEM "흐림 효과",                       ID_Blurr
+            MENUITEM "가우시안 흐림 효과",                  ID_Gaussian
+            MENUITEM "선명하게",                        ID_Sharpening
+            MENUITEM SEPARATOR
+            MENUITEM "중간 값 필터",                     ID_Median_Filter
+            MENUITEM "쿠와하라 필터",                     ID_Kuwahara_Filter
+        END
+        POPUP "특수 형태 변환"
+        BEGIN
+            MENUITEM "확대 및 인접 보간",                  ID_Nearest
+            MENUITEM "확대 및 양선형 보간",                 ID_Bilinear
+            MENUITEM SEPARATOR
+            MENUITEM "축소 및 안티 앨리어싱(중간)",            ID_Median_Sub
+            MENUITEM "축소 및 안티 앨리어싱(평균)",            ID_Mean_Sub
+        END
+        POPUP "기본 형태 변환"
+        BEGIN
+            MENUITEM "축소",                          ID_Menu_Down_Sampling
+            MENUITEM "확대",                          ID_Menu_Up_Sampling
+            MENUITEM "양자화",                         ID_Menu_Quantization
+            MENUITEM SEPARATOR
+            MENUITEM "이미지 이동",                      ID_Translation
+            MENUITEM "이미지 좌우 반전",                   ID_Mirror_Hor
+            MENUITEM "이미지 회전",                      ID_Rotation
+        END
     END
-    POPUP "값 보정"
+    POPUP "컬러"
     BEGIN
-        MENUITEM "밝기 증가",                       ID_Sum_Constant
-        MENUITEM "밝기 감소",                       ID_Sub_Constant
-        MENUITEM "대비 증가",                       ID_Mul_Constant
-        MENUITEM "대비 감소",                       ID_Div_Constant
-        MENUITEM SEPARATOR
-        MENUITEM "반전",                          ID_Nega_Transform
-        MENUITEM "감마 보정",                       32785
-        MENUITEM "이진화",                         ID_Binarization
-        MENUITEM SEPARATOR
-        MENUITEM "히스토그램",                       ID_Histogram
-        MENUITEM "히스토그램 스트레칭",                  ID_Histo_Stretch
-        MENUITEM "히스토그램 평활화",                   ID_Histo_Equal
-    END
-    POPUP "필터"
-    BEGIN
-        MENUITEM "엠보싱",                         ID_Embossing
-        MENUITEM "흐림 효과",                       ID_Blurr
-        MENUITEM "가우시안 흐림 효과",                  32801
-        MENUITEM "선명하게",                        ID_Sharpening
-        MENUITEM SEPARATOR
-        MENUITEM "중간 값 처리",                     ID_Median_Filter
-        MENUITEM "쿠와하라 처리",                     ID_Kuwahara_Filter
-    END
-    POPUP "고급 형태 변환"
-    BEGIN
-        MENUITEM "확대 및 인접 보간",                  ID_Nearest
-        MENUITEM "확대 및 양선형 보간",                 ID_Bilinear
-        MENUITEM SEPARATOR
-        MENUITEM "축소 및 안티 앨리어싱(중간)",            ID_Median_Sub
-        MENUITEM "축소 및 안티 앨리어싱(평균)",            ID_Mean_Sub
-        MENUITEM SEPARATOR
-        MENUITEM "이미지 이동",                      ID_Translation
-        MENUITEM "이미지 좌우 반전",                   ID_Mirror_Hor
-    END
-    POPUP "색상 처리"
-    BEGIN
-        MENUITEM "RGB to HSI",                  ID_RGB_to_HSI
-        MENUITEM "HSI to RGB",                  ID_HSI_to_RGB
-        MENUITEM "히스토그램 평탄화",                   32830
-    END
-    POPUP "조도 보정"
-    BEGIN
-        MENUITEM "조도 자동 보정",                    ID_Light_Compensation
-        MENUITEM "K-Means 보정",                  ID_Color_Image_Segmentation
+        POPUP "RGB HSI"
+        BEGIN
+            MENUITEM "RGB to HSI",                  ID_RGB_to_HSI
+            MENUITEM "HSI to RGB",                  ID_HSI_to_RGB
+        END
+        POPUP "필터 처리"
+        BEGIN
+            MENUITEM "히스토그램 평탄화",                   ID_Histo_Equal_Color
+            MENUITEM "쿠와하라 필터(색상)",                 ID_Kuwahara_Color
+        END
+        POPUP "보정"
+        BEGIN
+            MENUITEM "조도 자동 보정",                    ID_Light_Compensation
+            MENUITEM "K-Means 보정",                  ID_Color_Image_Segmentation
+        END
     END
 END
 
@@ -560,7 +572,7 @@ BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
-#endif    // Korean (Korea) resources
+#endif    // 한국어(대한민국) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

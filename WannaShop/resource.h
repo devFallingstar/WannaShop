@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by WannaShop.rc
+// Microsoft Visual C++에서 생성한 포함 파일입니다.
+// WannaShop.rc에서 사용되고 있습니다.
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
@@ -75,13 +75,54 @@
 #define ID_32828                        32828
 #define ID_Color_Image_Segmentation     32829
 #define ID_Histo_Equal_Color            32830
+#define ID_32831                        32831
+#define ID_Kuwahara_Color               32832
+#define ID_32833                        32833
+#define ID_32834                        32834
+#define ID_32835                        32835
+#define ID_32836                        32836
+#define ID_32837                        32837
+#define ID_32838                        32838
+#define ID_32839                        32839
+#define ID_32840                        32840
+#define ID_32841                        32841
+#define ID_32842                        32842
+#define ID_32843                        32843
+#define ID_32844                        32844
+#define ID_32845                        32845
+#define ID_32846                        32846
+#define ID_32847                        32847
+#define ID_32848                        32848
+#define ID_32849                        32849
+#define ID_32850                        32850
+#define ID_32851                        32851
+#define ID_32852                        32852
+#define ID_32853                        32853
+#define ID_32854                        32854
+#define ID_32855                        32855
+#define ID_32856                        32856
+#define ID_32857                        32857
+#define ID_32858                        32858
+#define ID_32859                        32859
+#define ID_32860                        32860
+#define ID_RGBHSI_RGBTOHSI              32861
+#define ID_RGBHSI_HSITORGB              32862
+#define ID_32863                        32863
+#define ID_32864                        32864
+#define ID_32865                        32865
+#define ID_32866                        32866
+#define ID_Gaussian                     32867
+#define ID_32868                        32868
+#define ID_Menu32869                    32869
+#define ID_32870                        32870
+#define ID_Rotation                     32871
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        320
-#define _APS_NEXT_COMMAND_VALUE         32831
+#define _APS_NEXT_COMMAND_VALUE         32872
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

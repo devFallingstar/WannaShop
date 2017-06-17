@@ -114,4 +114,9 @@ public:
 	void OnMenuColorImageSegmentation();
 	boolean m_isKMeansSeg;
 	void OnMenuHistoEqualColor();
+	double* m_HIST;
+	double* m_Sum_Of_HIST;
+	void OnMenuKuwaharaColor();
+	bool m_isKuwaharaColor;
+	void OnMenuRotation();
 };

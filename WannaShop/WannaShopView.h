@@ -73,6 +73,8 @@ public:
 	afx_msg void OnLightCompensation();
 	afx_msg void OnColorImageSegmentation();
 	afx_msg void OnHistoEqualColor();
+	afx_msg void OnKuwaharaColor();
+	afx_msg void OnRotation();
 };
 
 #ifndef _DEBUG  // WannaShopView.cpp의 디버그 버전
